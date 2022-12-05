@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Comfortaa&family=Cutive+Mono&family=Lexend+Deca&family=Poppins&family=Unlock&family=Unna&family=Vidaloka&display=swap');
+
+
+/* NAVBAR */
+
+nav {
+
+    font-family: Vidaloka;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+
+}
+
+.nav-txt {
+    margin-left: 10pt;
+    color: black;
+}
+
+.nav-icon {
+    margin-right: 20pt;
+}
+
+.nav-user-logo {
+    margin-left: 20pt;
+    color: black;
+}
+
+.nav-txt:hover {
+    color: #7895B2;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #7895B2;
+}
+
+
+/* NAVIGASI SECOND */
+
+/* OFFCANVAS CART*/
+.offcanvas {
+    height: 100vh;
+}
+
+.offcanvas-header h5 {
+    font-family: 'Vidaloka';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.02em;
+}
+
+
+.final-bg {
+    background-color: #7895B2;
+}
+
+.offcanvas-body .title {
+    font-family: 'Vidaloka';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.offcanvas-body .price {
+    font-family: 'Unna';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1px;
+}
+
+.offcanvas #desc-whishlist {
+    font-family: 'Unna';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.cart-nav #subtotal {
+    font-family: 'Unna';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+.cart-nav #Checkout {
+    font-family: 'Vidaloka';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+#dlt-whislist:hover path {
+    fill: white;
+}
+
+#dlt-whislist {
+    border: 1px solid lightslategrey;
+}
+
+#dlt-whislist:hover {
+    background-color: red;
+    border: none;
+}
+
+.checkout-btn {
+    background-color: #7895B2;
+    color: white;
+
+}
+
+.checkout-btn:hover {
+    background-color: whitesmoke;
+    color: black;
+    border: 1px solid lightslategray;
+}
+
+.card-nav {
+    position: fixed;
+}
+
+/* OFFCANVAS AKUN */
+.offcanvas-body .rounded-circle {
+    width: 75px;
+    height: 75px;
+}
+
+/* SECTION 1 */
+.section-1 {
+    font-family: Vidaloka;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+    margin-top: 120px;
+}
+
+.btn-view-product {
+    width: 140px;
+    height: 30px;
+}
+
+/* SECTION 2 */
+.section-2 {
+    background-color: #f6f6f6;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+}
+
+.section-2 h3 {
+    font-family: Vidaloka;
+    font-size: 30px;
+}
+
+.section-2 p {
+    font-family: Unna;
+    font-size: 20px;
+}
+
+/* SECTION 3 */
+.section-3 {
+    letter-spacing: 0.02em;
+    font-weight: 400;
+}
+
+.text-bg-section-3 h2 {
+    font-family: Vidaloka;
+    font-size: 36px;
+}
+
+.text-bg-section-3 p {
+    font-family: Unna;
+    font-size: 24px;
+}
+
+
+/* SECTION 5 */
+.section-5 {
+    box-sizing: border-box;
+}
+
+.bg-left {
+    background-image: url(../img-assets/section-5/falaq-lazuardi-jVGfozwWNPY-unsplash.jpg);
+    background-size: cover;
+    height: 500px;
+    background-position: center;
+}
+
+.bg-right {
+    background-image: url(../img-assets/section-5/christian-lue-HNQVmX1ztKM-unsplash.jpg);
+    background-size: cover;
+    height: 500px;
+    background-position: center;
+}
+
+.section-5 .txt-left {
+    background-color: #AEBDCA;
+}
+
+.section-5 .txt-right {
+    background-color: #E8DFCA;
+}
+
+.section-5 .btn-left:hover {
+    background-color: #5793cf;
+    color: white;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    ;
+}
+
+.section-5 .btn-right:hover {
+    background-color: #e0bf72;
+    color: white;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    ;
+}
+
+.section-5 .btn-left {
+    color: blue;
+}
+
+.section-5 .btn-right {
+    color: rgb(255, 255, 129);
+}
+
+/* TAMBAHAN */
+.tambahan .judul {
+    font-family: Vidaloka;
+    font-weight: 400;
+}
+
+.tambahan .desc {
+    font-family: Unna;
+    font-weight: 400;
+}
+
+/* CONTACT OWNER */
+.btn-email-send {
+    background-color: #7895B2;
+}
+
+.email-send {
+    border-color: #7895B2;
+}
+
+.contact-owner .judul {
+    font-family: Vidaloka;
+}
+
+.contact-owner .text {
+    font-family: Unna;
+}
+
+.contact-owner .btn {
+    background-color: #7895B2;
+    color: white;
+}
+
+.contact-owner .btn:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    ;
+}
+
+.contact-owner .form-control {
+    border: 2px solid #7895B2;
+}
+
+/* FOOTER  */
+.kata-kata {
+    font-family: Unlock;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 32px;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.list-sosmed span {
+    margin: auto;
+}
+
+.list-sosmed span a {
+    text-decoration: none;
+}
