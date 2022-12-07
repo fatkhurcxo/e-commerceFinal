@@ -35,8 +35,8 @@ nav {
 
 /* SECTION 1 */
 .btn-register:hover {
-    box-shadow: 0 12px 16px 0 rgb(179, 255, 174),
-        0 17px 50px 0 rgb(179, 255, 174);
+    box-shadow: 0 12px 16px 0 rgb(55, 146, 55),
+        0 17px 50px 0 rgb(55, 146, 55);
     ;
 }
 

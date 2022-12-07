@@ -1,3 +1,16 @@
+<?php
+session_start();
+require 'function.php';
+
+if (!isset($_SESSION["login"])) {
+    # code...
+    echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
+    header("location:user-login.php");
+    exit;
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,7 +85,7 @@
                                 Collection
                             </a>
                             <ul class="dropdown-menu text-black">
-                                <li><a class="dropdown-item" href="#">Carrier</a></li>
+                                <li><a class="dropdown-item" href="product.php">Carrier</a></li>
                                 <li><a class="dropdown-item" href="#">Backpack</a></li>
                                 <li><a class="dropdown-item" href="#">Sling Bag</a></li>
                             </ul>
@@ -261,7 +274,10 @@
                     <div class="col-8">
                         <h6>Fatkhur Rozak</h6>
                         <br>
-                        <button class="btn btn-outline-danger btn-sm ps-3 pe-3">Logout</button>
+                        <form action="" method="POST">
+                            <button type="submit" class="btn btn-outline-danger btn-sm ps-3 pe-3" name="log-out">Logout</button>
+                        </form>
+
                     </div>
                 </div>
             </div>

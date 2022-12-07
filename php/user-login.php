@@ -1,3 +1,9 @@
+<?php
+
+require 'function.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- head icon -->
-    <link rel="icon" href="../img-assets/head-assets/raget-headIcon.png">
+    <link rel="icon" href="../img-assets//head-assets/raget-headIcon.png">
 
     <!-- css login-form -->
     <link rel="stylesheet" href="../css/user-login.css">
@@ -47,9 +53,16 @@
                 <img src="../img-assets/section-1/karikatur.png" class="img-fluid" alt="">
             </div>
 
-            <div class="container-fluid text-center mt-4 mb-3">
-                <h3>Selamat Datang Kamuuu
+            <div class="container-fluid text-center mt-2">
+                <h3 class="fw-bold">Selamat Datang Kamuuu
                 </h3>
+                <div class="container mt-2">
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <img class="img-fluid" src="../img-assets/section-1/emojione_beating-heart.png" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="container-md contain-card container-sm d-flex justify-content-center card-tutor pt-3 pb-3">
@@ -67,7 +80,7 @@
                     <div class="col-xl-4 mt-xxl-0 mt-3">
                         <div class="border p-3 rounded-3 bg-white">
                             <h6 class="textnya">Nek kamu wes punya akun</h6>
-                            <p class="">Langungo login ae gak kesuen</p>
+                            <p class="">Langsungo login ae gak kesuen</p>
                             <!-- BUTTON LOGIN AKUN TRIGGER -->
                             <button class="btn btn-primary container btn-login" data-bs-toggle="modal" data-bs-target="#modal-login">
                                 Nde sinilo login
@@ -96,73 +109,76 @@
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Nama
                                             Lengkap</span></label>
-                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan nama lengkap anda" aria-label="NamaLengkap" name="namaLengkap" autocomplete="off">
+                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan nama lengkap anda" name="namaLengkap" autocomplete="off">
                                 </div>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Username</span></label>
-                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan username" aria-label="Username" name="username" autocomplete="off">
+                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan username" name="reg-uname" autocomplete="off">
                                 </div>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Password</span></label>
-                                    <input type="password" id="usernameInput" class="form-control" placeholder="Masukkan password" aria-label="Password" name="password">
+                                    <input type="password" id="usernameInput" class="form-control" placeholder="Masukkan password" name="reg-pass">
                                 </div>
                             </div>
                             <div class="input-group mt-3">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Confirm
                                             Password</span></label>
-                                    <input type="password" id="usernameInput" class="form-control" placeholder="Konfirmasi password" aria-label="Password" name="password2">
+                                    <input type="password" id="usernameInput" class="form-control" placeholder="Konfirmasi password" name="password2">
                                 </div>
                             </div>
+                            <div class="container modal-footer">
+                                <button type="submit" class="btn container btn-success" data-bs-dismiss="modal" name="register">Buat Akun</button>
+                            </div>
                         </div>
-                        <div class="container modal-footer">
-                            <button type="submit" class="btn container btn-success" value="regis" data-bs-dismiss="modal" name="register">Buat Akun</button>
-                        </div>
+
                     </form>
                 </div>
             </div>
         </div>
 
         <!-- Modal login Akun -->
-        <div class="modal fade" id="modal-login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                            <img src="../img-assets/section-1/login.png" alt="" style="width: 40px; height: 40px;">
-                            <span class="ms-3 text-primary">Ndang masuko</span>
-                        </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <!-- FORM UNTUK LOGIN -> METHOD == GET -->
-                    <form action="login2.php" method="POST" id="form-untukLogin">
+        <form method="POST" id="form-untukLogin">
+            <div class="modal fade" id="modal-login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                <img src="../img-assets/section-1/login.png" alt="" style="width: 40px; height: 40px;">
+                                <span class="ms-3 text-primary">Ndang masuko</span>
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- FORM UNTUK LOGIN -> METHOD == GET -->
+
                         <div class="modal-body container-fluid">
                             <!-- USERNAME -->
                             <div class="input-group">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Username</span></label>
-                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan username" aria-label="Username" name="username" autocomplete="off">
+                                    <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan username" name="username" autocomplete="off" required>
                                 </div>
                             </div>
                             <!-- PASSWORD -->
                             <div class="input-group mt-3">
                                 <div class="form-group container">
                                     <label for="passwordInput" class="mb-2"><span style="font-weight: bold;">Password</span></label>
-                                    <input type="password" id="passwordInput" class="form-control" placeholder="Masukkan password" aria-label="Password" name="password">
+                                    <input type="password" id="passwordInput" class="form-control" placeholder="Masukkan password" name="password" required>
                                 </div>
                             </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn container btn-primary" data-bs-dismiss="modal" name="login">Masuk</button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn container btn-primary" data-bs-dismiss="modal" value="login" name="login">Masuk</button>
-                        </div>
-                    </form>
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
 
     <!-- FOOTER -->

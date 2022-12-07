@@ -1,3 +1,23 @@
+<?php
+session_start();
+require 'function.php';
+
+if (!isset($_SESSION["login"])) {
+    # code...
+    echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
+    header("location:user-login.php");
+    exit;
+}
+
+// $select_data = mysqli_query($db_connect, "SELECT * FROM raget_product");
+// if (!$select_data) {
+//     # code...
+//     echo mysqli_error($db_connect);
+// }
+$product = query("SELECT * FROM raget_product");
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +35,7 @@
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
-<body>
+<body class="bg-light">
     <!-- NAVIGASI -->
     <nav class="navbar navbar-expand-md bg-light fixed-top">
         <div class="container-fluid p-2 d-flex">
@@ -259,7 +279,9 @@
                     <div class="col-8">
                         <h6>Fatkhur Rozak</h6>
                         <br>
-                        <button class="btn btn-outline-danger btn-sm ps-3 pe-3">Logout</button>
+                        <form action="" method="POST">
+                            <button type="submit" name="log-out" class="btn btn-outline-danger btn-sm ps-3 pe-3">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -364,22 +386,43 @@
     </div>
 
 
-    <section class="section-1">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-
-                </div>
-                <div class="col">
-
-                </div>
-                <div class="col">
-
-                </div>
-                <div class="col">
-
-                </div>
+    <section class="section-1 bg-light">
+        <div class="container">
+            <div class="row gx-4 row-cols-4">
+                <?php foreach ($product as $row) : ?>
+                    <div class="col">
+                        <div class="border bg-white rounded">
+                            <div class="row row-cols-1 pt-2 pb-3">
+                                <div class="col d-flex justify-content-center" style="height: 300px;">
+                                    <img class="img-fluid" src="../img-assets/product/<?php echo $row["product_image"]; ?>" alt="">
+                                </div>
+                                <div class="col text-center">
+                                    <h5 class="fw-bold"><?php echo $row["product_name"]; ?></h5>
+                                </div>
+                                <div class="col text-center">
+                                    <h5>Rp<?php echo $row["product_price"]; ?></h5>
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    <span>Varian : <span class="fw-bold"><?php echo $row["product_color"]; ?></span></span>
+                                    <!-- <div class="rounded-circle bg-dark">
+                                        apa
+                                    </div>
+                                    <div class="rounded-circle bg-danger">
+                                        apa
+                                    </div>
+                                    <div class="rounded-circle bg-warning">
+                                        apa
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-sm btn-outline-primary container">View detail</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
+
         </div>
     </section>
 
