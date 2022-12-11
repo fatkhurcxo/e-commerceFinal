@@ -33,6 +33,9 @@ $product = query("SELECT * FROM raget_product");
 
     <!-- css login-form -->
     <link rel="stylesheet" href="../css/index.css">
+
+    <!-- css product -->
+    <link rel="stylesheet" href="../css/product.css">
 </head>
 
 <body class="bg-light">
@@ -84,7 +87,7 @@ $product = query("SELECT * FROM raget_product");
                 <div class="nav-container nav-txt">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link nav-txt" aria-current="page" href="#">Home</a>
+                            <a class="nav-link nav-txt" aria-current="page" href="index.php">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle nav-txt" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -368,6 +371,17 @@ $product = query("SELECT * FROM raget_product");
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="">
+                                        <div class="row row-cols-2">
+                                            <div class="col d-flex justify-content-between">
+                                                <span>Status</span>
+                                                <span> :</span>
+                                            </div>
+                                            <div class="col text-end text-danger">
+                                                Belum dibayar
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row bg-light pt-3 pb-3 rounded mt-2">
                                         <div class="col-5">
                                             Total pesanan:
@@ -375,6 +389,22 @@ $product = query("SELECT * FROM raget_product");
                                         <div class="col text-end">
                                             <strong>Rp2.429.400,00</strong>
                                         </div>
+                                    </div>
+
+                                    <!-- UNGGAH BNUKTI PEMBAYARAN -->
+                                    <form action="" method="POST">
+                                        <div class="mb-3" id="input-bukti">
+                                            <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                        </div>
+                                        <div class="unggah float-end mb-2">
+                                            <button class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
+                                        </div>
+                                        <!-- <div class="btn-bayar d-flex justify-content-end align-items-center mt-2 mb-2">
+
+                                        </div> -->
+                                    </form>
+                                    <div class="cara-bayar pt-2">
+                                        <a class="">Lihat cara pembayaran</a>
                                     </div>
                                 </div>
                             </div>
@@ -386,46 +416,85 @@ $product = query("SELECT * FROM raget_product");
     </div>
 
 
-    <section class="section-1 bg-light">
+    <section class="section-1">
         <div class="container">
-            <div class="row gx-4 row-cols-4">
+            <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-1">
                 <?php foreach ($product as $row) : ?>
-                    <div class="col">
-                        <div class="border bg-white rounded">
-                            <div class="row row-cols-1 pt-2 pb-3">
-                                <div class="col d-flex justify-content-center" style="height: 300px;">
-                                    <img class="img-fluid" src="../img-assets/product/<?php echo $row["product_image"]; ?>" alt="">
-                                </div>
-                                <div class="col text-center">
-                                    <h5 class="fw-bold"><?php echo $row["product_name"]; ?></h5>
-                                </div>
-                                <div class="col text-center">
-                                    <h5>Rp<?php echo $row["product_price"]; ?></h5>
-                                </div>
-                                <div class="col d-flex justify-content-center">
-                                    <span>Varian : <span class="fw-bold"><?php echo $row["product_color"]; ?></span></span>
-                                    <!-- <div class="rounded-circle bg-dark">
-                                        apa
+                    <div class="col mt-3 mt-sm-0">
+                        <div class="container-product">
+                            <div class="row row-cols-1 pt-4 pb-4">
+                                <a href="" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <div class="col d-flex justify-content-center" style="height: 300px;">
+                                        <img class="img-fluid" src="../img-assets/product/<?php echo $row["product_image"]; ?>" alt="">
                                     </div>
-                                    <div class="rounded-circle bg-danger">
-                                        apa
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-6 bg-warning">
+                                                        sadas
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="row row-cols-1">
+                                                            <div class="col d-flex justify-content-end">
+                                                                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h4><?php echo $row["product_name"]; ?></h4>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h5 class="product-price"><a href="" class="">Rp<?php echo $row["product_price"]; ?></a></h5>
+                                                            </div>
+                                                            <div class="col mt-5">
+                                                                <span>
+                                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <button class="btn btn-danger container">Jumlah</button>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <button class="btn btn-keranjang container">
+                                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M12 9C12.55 9 13 8.55 13 8V6H15C15.55 6 16 5.55 16 5C16 4.45 15.55 4 15 4H13V2C13 1.45 12.55 1 12 1C11.45 1 11 1.45 11 2V4H9C8.45 4 8 4.45 8 5C8 5.55 8.45 6 9 6H11V8C11 8.55 11.45 9 12 9ZM7 18C5.9 18 5.01 18.9 5.01 20C5.01 21.1 5.9 22 7 22C8.1 22 9 21.1 9 20C9 18.9 8.1 18 7 18ZM17 18C15.9 18 15.01 18.9 15.01 20C15.01 21.1 15.9 22 17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18ZM8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.54 5.83C20.6622 5.59878 20.6887 5.32883 20.6139 5.07823C20.5391 4.82763 20.369 4.6164 20.14 4.49C20.024 4.42649 19.8966 4.3867 19.7651 4.37295C19.6336 4.35921 19.5007 4.37179 19.3741 4.40995C19.2475 4.44811 19.1297 4.5111 19.0278 4.59524C18.9258 4.67937 18.8415 4.78297 18.78 4.9L15.55 11H8.53L4.27 2H2C1.45 2 1 2.45 1 3C1 3.55 1.45 4 2 4H3L6.6 11.59L5.25 14.03C4.52 15.37 5.48 17 7 17H18C18.55 17 19 16.55 19 16C19 15.45 18.55 15 18 15H7L8.1 13Z" fill="#111111" />
+                                                                            </svg>
+                                                                            Keranjang
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Understood</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="rounded-circle bg-warning">
-                                        apa
-                                    </div> -->
                                 </div>
                             </div>
-                            <div class="col">
-                                <button class="btn btn-sm btn-outline-primary container">View detail</button>
-                            </div>
+                        </div>
+                        <div class="col ps-2 pt-2">
+                            <h5 class="product-name"><a href="" class=""><?php echo $row["product_name"]; ?></a></h5>
+                        </div>
+                        <div class="col ps-2">
+                            <h5 class="product-price"><a href="" class="">Rp<?php echo $row["product_price"]; ?></a></h5>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
-
         </div>
     </section>
 
+    <span>ANDAI</span>
     <!-- CONTACT OWNER -->
     <div class="container contact-owner mt-5 mb-3">
         <div class="text-center">

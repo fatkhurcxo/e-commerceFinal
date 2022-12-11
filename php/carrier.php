@@ -9,6 +9,13 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+// $select_data = mysqli_query($db_connect, "SELECT * FROM raget_product");
+// if (!$select_data) {
+//     # code...
+//     echo mysqli_error($db_connect);
+// }
+$product = query("SELECT * FROM raget_product");
+
 
 ?>
 <!DOCTYPE html>
@@ -26,10 +33,12 @@ if (!isset($_SESSION["login"])) {
 
     <!-- css login-form -->
     <link rel="stylesheet" href="../css/index.css">
+
+    <!-- css product -->
+    <link rel="stylesheet" href="../css/product.css?v2">
 </head>
 
-<body>
-
+<body class="bg-light">
     <!-- NAVIGASI -->
     <nav class="navbar navbar-expand-md bg-light fixed-top">
         <div class="container-fluid p-2 d-flex">
@@ -64,12 +73,12 @@ if (!isset($_SESSION["login"])) {
                         </span>
                     </button>
                     <!-- <button class="navbar-toggler btn btn-sm" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarIcon" aria-controls="navbarNavDropdown" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon">
-
-                        </span>
-                    </button> -->
+                            data-bs-target="#navbarIcon" aria-controls="navbarNavDropdown" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon">
+    
+                            </span>
+                        </button> -->
                 </div>
             </div>
             <!-- </div> -->
@@ -78,14 +87,14 @@ if (!isset($_SESSION["login"])) {
                 <div class="nav-container nav-txt">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link nav-txt" aria-current="page" href="#">Home</a>
+                            <a class="nav-link nav-txt" aria-current="page" href="index.php">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle nav-txt" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Collection
                             </a>
                             <ul class="dropdown-menu text-black">
-                                <li><a class="dropdown-item" href="carrier.php">Carrier</a></li>
+                                <li><a class="dropdown-item" href="#">Carrier</a></li>
                                 <li><a class="dropdown-item" href="#">Backpack</a></li>
                                 <li><a class="dropdown-item" href="#">Sling Bag</a></li>
                             </ul>
@@ -128,7 +137,6 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </nav>
-
 
     <!-- NAVIGASI RESPONSIVE -->
     <nav class="nav-second fixed-bottom bg-light pt-3">
@@ -275,9 +283,8 @@ if (!isset($_SESSION["login"])) {
                         <h6>Fatkhur Rozak</h6>
                         <br>
                         <form action="" method="POST">
-                            <button type="submit" class="btn btn-outline-danger btn-sm ps-3 pe-3" name="log-out">Logout</button>
+                            <button type="submit" name="log-out" class="btn btn-outline-danger btn-sm ps-3 pe-3">Logout</button>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -408,292 +415,130 @@ if (!isset($_SESSION["login"])) {
         </div>
     </div>
 
+
     <section class="section-1">
-        <div class="container-fluid">
-            <div class="row mt-5 mb-5">
-                <div class="col-md-6 ps-5 pe-5 d-flex align-items-lg-center pt-5 pt-md-0 pb-5 pb-md-0">
-                    <div class="container">
-                        <div class="row mb-5">
-                            <div class="col">
-                                <h1 class="display-5 ">Raget Bags</h1>
-                            </div>
-                        </div>
-                        <div class="row jarak-text">
-                            <div class="col">
-                                <span>
-                                    <h3>Menjadi teman disetiap perjalananmu</h3>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row mt-1">
-                            <div class="col">
-                                <span>
-                                    <h6>Temukan beragam model tas yang sesuai dengan kebutuhan perjalananmu</h6>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col d-flex">
-                                <div class="border-bottom btn-view-product">
-                                    <a href="" class="text-decoration-none text-black">
-                                        <span class="pe-3">Lihat produk</span>
-                                        <span>
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M3 11H17.17L13.59 7.41L15 6L21 12L15 18L13.59 16.58L17.17 13H3V11Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col d-flex justify-content-center">
-                            <img class="img-fluid" src="../img-assets/section-1/produk-hero.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="container">
+            <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-1">
+                <?php foreach ($product as $row) : ?>
+                    <div class="col mt-3 mt-sm-0">
+                        <div class="container-product">
+                            <div class="row row-cols-1 pt-4 pb-4">
+                                <a href="" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <div class="col d-flex justify-content-center" style="height: 300px;">
+                                        <img class="img-fluid" src="../img-assets/product/<?php echo $row["product_image"]; ?>" alt="">
+                                    </div>
+                                </a>
 
-    <section class="section-2 bg-white">
-        <div class="container-fluid p-3">
-            <div class="container text-center pt-5">
-                <h3>Popular Collection</h3>
-                <p>Produk tebaik yang menjadi unggulan kami</p>
-            </div>
-        </div>
-        <div class="container pb-3">
-            <div class="row">
-                <div class="col">
-                    <div class="row gx-5">
-                        <div class="col-md-6">
-                            <div class="">
-                                <img class="img-fluid mx-auto my-auto d-block rounded" src="../img-assets/section-2/hero-img.png" alt="">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mt-3 mt-md-0">
-                            <div>
-                                <div class="row row-cols-2 gy-3 gx-3">
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="col justify-content-end d-flex d-lg-none">
+                                                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="row row-cols-lg-2 row-cols-1">
+                                                    <div class="col">
+                                                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="false">
+                                                            <div class="carousel-inner">
+                                                                <div class="carousel-item active">
+                                                                    <img src="../img-assets/product/marmoset.png" class="d-block img-fluid ms-auto me-auto" style="height: 400px;" alt="...">
+                                                                </div>
+                                                                <div class="carousel-item ">
+                                                                    <img src="../img-assets/product/produk-1.png" class="d-block img-fluid ms-auto me-auto" style="height: 400px;" alt="...">
+                                                                </div>
+                                                                <div class="carousel-item ">
+                                                                    <img src="../img-assets/product/ragnarok.png" class="d-block img-fluid ms-auto me-auto" style="height: 400px;" alt="...">
+                                                                </div>
+                                                            </div>
+                                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M7.99 13L19 13C19.55 13 20 12.55 20 12C20 11.45 19.55 11 19 11L7.99 11V9.21004C7.99 8.76004 7.45 8.54004 7.14 8.86004L4.36 11.65C4.17 11.85 4.17 12.16 4.36 12.36L7.14 15.15C7.45 15.47 7.99 15.24 7.99 14.8V13V13Z" fill="#111111" />
+                                                                </svg>
+                                                                <span class="visually-hidden">Previous</span>
+                                                            </button>
+                                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                                                <svg width="30" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M16.01 11H5C4.45 11 4 11.45 4 12C4 12.55 4.45 13 5 13H16.01V14.79C16.01 15.24 16.55 15.46 16.86 15.14L19.64 12.35C19.83 12.15 19.83 11.84 19.64 11.64L16.86 8.84996C16.55 8.52996 16.01 8.75996 16.01 9.19996V11V11Z" fill="#111111" />
+                                                                </svg>
+                                                                <span class="visually-hidden">Next</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="row row-cols-1 mt-lg-0 mt-3">
+                                                            <div class="col justify-content-end d-none d-lg-flex">
+                                                                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h4><?php echo $row["product_name"]; ?></h4>
+                                                            </div>
+                                                            <div class="col">
+                                                                <h5 class="product-price"><a href="" class="">Rp<?php echo $row["product_price"]; ?></a></h5>
+                                                            </div>
+                                                            <div class="col mt-5">
+                                                                <span>
+                                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.
+                                                                </span>
+                                                            </div>
+                                                            <div class="col modal-btn">
+                                                                <div class="row ps-lg-0 ps-3 pe-lg-0 pe-3">
+                                                                    <div class="col">
+                                                                        <div class="row rounded">
+                                                                            <div class="col-lg-6 col-4 d-flex justify-content-center align-items-center">
+                                                                                <div>
+                                                                                    <span style="font-size: large; font-weight: 100;">Jumlah</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <form method="POST" action="">
+                                                                                    <div class="input-group">
+                                                                                        <button class="btn btn-sm btn-count">
+                                                                                            <svg class="svg-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                <path d="M16 17.18L16 6.82005C16 6.03005 15.13 5.55005 14.46 5.98005L6.32 11.16C6.17749 11.2502 6.0601 11.375 5.97876 11.5227C5.89742 11.6705 5.85476 11.8364 5.85476 12.0051C5.85476 12.1737 5.89742 12.3396 5.97876 12.4874C6.0601 12.6351 6.17749 12.7599 6.32 12.8501L14.46 18.02C14.6108 18.1176 14.7852 18.1726 14.9647 18.1794C15.1442 18.1861 15.3222 18.1442 15.4799 18.0582C15.6376 17.9722 15.7691 17.8452 15.8607 17.6906C15.9522 17.5361 16.0004 17.3597 16 17.18V17.18Z" fill="#9F9F9F" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                        <input type="text" name="count" class="form-control border-0" value="1" min="1" max="20">
+                                                                                        <button class="btn btn-sm btn-count">
+                                                                                            <svg class="svg-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                <path d="M8 6.81995V17.18C8 17.97 8.87 18.45 9.54 18.02L17.68 12.84C17.8225 12.7498 17.9399 12.625 18.0212 12.4773C18.1026 12.3295 18.1452 12.1636 18.1452 11.9949C18.1452 11.8263 18.1026 11.6604 18.0212 11.5126C17.9399 11.3649 17.8225 11.2401 17.68 11.1499L9.54 5.97995C9.38917 5.88239 9.2148 5.82736 9.0353 5.82064C8.85579 5.81393 8.6778 5.85579 8.52011 5.94181C8.36241 6.02782 8.23085 6.15481 8.13931 6.30936C8.04777 6.46392 7.99964 6.64032 8 6.81995V6.81995Z" fill="#9F9F9F" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <button class="btn btn-keranjang container">
+                                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M12 9C12.55 9 13 8.55 13 8V6H15C15.55 6 16 5.55 16 5C16 4.45 15.55 4 15 4H13V2C13 1.45 12.55 1 12 1C11.45 1 11 1.45 11 2V4H9C8.45 4 8 4.45 8 5C8 5.55 8.45 6 9 6H11V8C11 8.55 11.45 9 12 9ZM7 18C5.9 18 5.01 18.9 5.01 20C5.01 21.1 5.9 22 7 22C8.1 22 9 21.1 9 20C9 18.9 8.1 18 7 18ZM17 18C15.9 18 15.01 18.9 15.01 20C15.01 21.1 15.9 22 17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18ZM8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.54 5.83C20.6622 5.59878 20.6887 5.32883 20.6139 5.07823C20.5391 4.82763 20.369 4.6164 20.14 4.49C20.024 4.42649 19.8966 4.3867 19.7651 4.37295C19.6336 4.35921 19.5007 4.37179 19.3741 4.40995C19.2475 4.44811 19.1297 4.5111 19.0278 4.59524C18.9258 4.67937 18.8415 4.78297 18.78 4.9L15.55 11H8.53L4.27 2H2C1.45 2 1 2.45 1 3C1 3.55 1.45 4 2 4H3L6.6 11.59L5.25 14.03C4.52 15.37 5.48 17 7 17H18C18.55 17 19 16.55 19 16C19 15.45 18.55 15 18 15H7L8.1 13Z" fill="white" />
+                                                                            </svg>
+                                                                            Keranjang
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-3 mt-3 bg-white">
-        <figure class="figure">
-            <img class="figure-img img-fluid" src="../img-assets/section-3/bg-section-3.jpg" alt="">
-            <figcaption class="figure-caption p-2">
-                “ Tuhan menciptakan Alam semesta untuk dijadikan tempat merenung bagi orang-orang yang berfikir.”
-                <span style="font-weight: bold; font-style: italic;">- Raget Outdoor Camp</span>
-            </figcaption>
-        </figure>
-    </section>
-
-    <section class="section-4 mt-5">
-        <div class="row container-fluid d-flex flex-column-reverse flex-xl-row">
-            <div class="col d-flex store-desc">
-                <div class="row row-cols-1 justify-content-center">
-                    <div class="col col-xl-10">
-                        <h3>Raget Bags Store</h3>
-                        <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-                            has
-                            been the
-                            industry's standard dummy text
-                            ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                            make a
-                            type specimen book. It
-                            has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining
-                            essentially unchanged.</p>
-                    </div>
-                    <div class="col col-xl-10 alamat-toko mt-xl-0 mt-3">
-                        <div class="row">
-                            <div class="col-2">
-                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 2.5C19.1375 2.5 22.5 5.825 22.5 9.9375C22.5 15.5125 15 23.75 15 23.75C15 23.75 7.5 15.5125 7.5 9.9375C7.5 5.825 10.8625 2.5 15 2.5ZM15 7.5C14.337 7.5 13.7011 7.76339 13.2322 8.23223C12.7634 8.70107 12.5 9.33696 12.5 10C12.5 10.663 12.7634 11.2989 13.2322 11.7678C13.7011 12.2366 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.2366 16.7678 11.7678C17.2366 11.2989 17.5 10.663 17.5 10C17.5 9.33696 17.2366 8.70107 16.7678 8.23223C16.2989 7.76339 15.663 7.5 15 7.5ZM25 23.75C25 26.5125 20.525 28.75 15 28.75C9.475 28.75 5 26.5125 5 23.75C5 22.1375 6.525 20.7 8.8875 19.7875L9.6875 20.925C8.3375 21.4875 7.5 22.2625 7.5 23.125C7.5 24.85 10.8625 26.25 15 26.25C19.1375 26.25 22.5 24.85 22.5 23.125C22.5 22.2625 21.6625 21.4875 20.3125 20.925L21.1125 19.7875C23.475 20.7 25 22.1375 25 23.75Z" fill="black" />
-                                </svg>
-                            </div>
-                            <div class="col">
-                                <span class="fw-bold">
-                                    Jl. Pahlawan No.7c, Kwadengan Barat, Lemahputro, Kec. Sidoarjo, Kabupaten
-                                    Sidoarjo,
-                                    Jawa
-                                    Timur 61213
-                                </span>
-                            </div>
-                        </div>
-                        <button type="button" data-bs-toggle="modal" class="btn btn-outline-success container-fluid mt-5" data-bs-target="#exampleModal">
-                            Lihat lokasi
-                        </button>
-
-                        <!-- MODAL -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Raget Store Maps</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1978.0212761638657!2d112.70842515535276!3d-7.460544748264502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e131e6f3c9cf%3A0x8ec18511b0001e91!2sPolije%20PDD%20Sidoarjo!5e0!3m2!1sid!2sid!4v1670237421599!5m2!1sid!2sid" class="container-fluid" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col ps-2 pt-2">
+                            <h5 class="product-name"><a href="product-detail.php" class=""><?php echo $row["product_name"]; ?></a></h5>
+                        </div>
+                        <div class="col ps-2">
+                            <h5 class="product-price"><a href="product-detail.php" class="">Rp<?php echo $row["product_price"]; ?></a></h5>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col store-img">
-                <figure class="figure">
-                    <img class="figure-img img-fluid" src="../img-assets/section-4/clark-street-mercantile-qnKhZJPKFD8-unsplash.jpg" alt="">
-                    <figcaption class="figure-caption">
-                        Offline store Raget Bags
-                    </figcaption>
-                </figure>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
-
-    <section class="container-fluid section-5 mt-3">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-            <div class="col bg-success bg-left">
-            </div>
-            <div class="col d-flex align-items-center txt-left">
-                <div class="container w-75 p-3">
-                    <h4>Mountaineering</h4>
-                    <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                        been
-                        the
-                        industry's standard dummy text
-                        ever since the 1500s.
-                    </p>
-                    <button class="container mt-3 btn btn-left">
-                        Belanja sekarang
-                    </button>
-                </div>
-            </div>
-            <div class="col bg-warning bg-right">
-            </div>
-            <div class="col d-flex align-items-center txt-right">
-                <div class="container w-75 p-3">
-                    <h4>Traveling</h4>
-                    <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                        been
-                        the
-                        industry's standard dummy text
-                        ever since the 1500s.
-                    </p>
-                    <button class="container mt-3 btn btn-right">
-                        Belanja sekarang
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TAMBAHAN -->
-    <div class="container mt-5 tambahan border-bottom border-dark border-2">
-        <div class="row row-cols-1 row-cols-md-3">
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M33.333 13.3332H6.66634V9.99984H33.333M33.333 29.9998H6.66634V19.9998H33.333M33.333 6.6665H6.66634C4.81634 6.6665 3.33301 8.14984 3.33301 9.99984V29.9998C3.33301 30.8839 3.6842 31.7317 4.30932 32.3569C4.93444 32.982 5.78229 33.3332 6.66634 33.3332H33.333C34.2171 33.3332 35.0649 32.982 35.69 32.3569C36.3152 31.7317 36.6663 30.8839 36.6663 29.9998V9.99984C36.6663 9.11578 36.3152 8.26794 35.69 7.64281C35.0649 7.01769 34.2171 6.6665 33.333 6.6665Z" fill="black" />
-                            <path d="M17.0703 26.9766C17.112 26.9896 17.1536 26.9987 17.1953 27.0039C17.237 27.0065 17.2786 27.0078 17.3203 27.0078C17.4245 27.0078 17.5247 26.9935 17.6211 26.9648C17.7174 26.9362 17.8073 26.8958 17.8906 26.8438C17.9766 26.7891 18.0521 26.724 18.1172 26.6484C18.1849 26.5703 18.2396 26.4844 18.2812 26.3906L19.0625 27.1758C18.9635 27.3164 18.849 27.4427 18.7188 27.5547C18.5911 27.6667 18.4518 27.7617 18.3008 27.8398C18.1523 27.918 17.9948 27.9766 17.8281 28.0156C17.6641 28.0573 17.4948 28.0781 17.3203 28.0781C17.026 28.0781 16.7487 28.0234 16.4883 27.9141C16.2305 27.8047 16.0039 27.6523 15.8086 27.457C15.6159 27.2617 15.4635 27.0299 15.3516 26.7617C15.2396 26.4909 15.1836 26.194 15.1836 25.8711C15.1836 25.5404 15.2396 25.2383 15.3516 24.9648C15.4635 24.6914 15.6159 24.4583 15.8086 24.2656C16.0039 24.0729 16.2305 23.9232 16.4883 23.8164C16.7487 23.7096 17.026 23.6562 17.3203 23.6562C17.4948 23.6562 17.6654 23.6771 17.832 23.7188C17.9987 23.7604 18.1562 23.8203 18.3047 23.8984C18.4557 23.9766 18.5964 24.0729 18.7266 24.1875C18.8568 24.2995 18.9714 24.4258 19.0703 24.5664L17.0703 26.9766ZM17.6172 24.7773C17.5677 24.7591 17.5182 24.7474 17.4688 24.7422C17.4219 24.737 17.3724 24.7344 17.3203 24.7344C17.1745 24.7344 17.0365 24.7617 16.9062 24.8164C16.7786 24.8685 16.6667 24.944 16.5703 25.043C16.4766 25.1419 16.4023 25.2617 16.3477 25.4023C16.293 25.5404 16.2656 25.6966 16.2656 25.8711C16.2656 25.9102 16.2669 25.9544 16.2695 26.0039C16.2747 26.0534 16.2812 26.1042 16.2891 26.1562C16.2995 26.2057 16.3112 26.2539 16.3242 26.3008C16.3372 26.3477 16.3542 26.3893 16.375 26.4258L17.6172 24.7773ZM22.875 28H19.3867L21.1484 24.8867H19.3867V23.8242H22.875L21.1133 26.9375H22.875V28Z" fill="black" />
-                            <path d="M18.667 17.3332H19.2003C19.2003 17.5732 19.5657 17.7776 20.0003 17.7776C20.435 17.7776 20.8003 17.5732 20.8003 17.3332C20.8003 17.0887 20.523 16.9998 19.9363 16.8821C19.371 16.7643 18.667 16.6176 18.667 15.9998C18.667 15.6021 19.059 15.2643 19.6003 15.1509V14.6665H20.4003V15.1509C20.9417 15.2643 21.3337 15.6021 21.3337 15.9998H20.8003C20.8003 15.7598 20.435 15.5554 20.0003 15.5554C19.5657 15.5554 19.2003 15.7598 19.2003 15.9998C19.2003 16.2443 19.4777 16.3332 20.0643 16.4509C20.6297 16.5687 21.3337 16.7154 21.3337 17.3332C21.3337 17.7309 20.9417 18.0687 20.4003 18.1821V18.6665H19.6003V18.1821C19.059 18.0687 18.667 17.7309 18.667 17.3332Z" fill="white" />
-                            <path d="M24 17.6667H24.5333C24.5333 17.9067 24.8987 18.1111 25.3333 18.1111C25.768 18.1111 26.1333 17.9067 26.1333 17.6667C26.1333 17.4222 25.856 17.3333 25.2693 17.2156C24.704 17.0978 24 16.9511 24 16.3333C24 15.9356 24.392 15.5978 24.9333 15.4844V15H25.7333V15.4844C26.2747 15.5978 26.6667 15.9356 26.6667 16.3333H26.1333C26.1333 16.0933 25.768 15.8889 25.3333 15.8889C24.8987 15.8889 24.5333 16.0933 24.5333 16.3333C24.5333 16.5778 24.8107 16.6667 25.3973 16.7844C25.9627 16.9022 26.6667 17.0489 26.6667 17.6667C26.6667 18.0644 26.2747 18.4022 25.7333 18.5156V19H24.9333V18.5156C24.392 18.4022 24 18.0644 24 17.6667Z" fill="white" />
-                            <path d="M13 17.6667H13.5333C13.5333 17.9067 13.8987 18.1111 14.3333 18.1111C14.768 18.1111 15.1333 17.9067 15.1333 17.6667C15.1333 17.4222 14.856 17.3333 14.2693 17.2156C13.704 17.0978 13 16.9511 13 16.3333C13 15.9356 13.392 15.5978 13.9333 15.4844V15H14.7333V15.4844C15.2747 15.5978 15.6667 15.9356 15.6667 16.3333H15.1333C15.1333 16.0933 14.768 15.8889 14.3333 15.8889C13.8987 15.8889 13.5333 16.0933 13.5333 16.3333C13.5333 16.5778 13.8107 16.6667 14.3973 16.7844C14.9627 16.9022 15.6667 17.0489 15.6667 17.6667C15.6667 18.0644 15.2747 18.4022 14.7333 18.5156V19H13.9333V18.5156C13.392 18.4022 13 18.0644 13 17.6667Z" fill="white" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Easy Payment</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Pembayaran yang mudah dan terpercaya</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 5H30V8.33333C28.1667 8.33333 26.6667 9.83333 26.6667 11.6667V31.6667C26.6667 33.5167 25.1833 35 23.3333 35H6.66667C5.78261 35 4.93476 34.6488 4.30964 34.0237C3.68452 33.3986 3.33333 32.5507 3.33333 31.6667V11.6667C3.33333 10.7826 2.98214 9.93476 2.35702 9.30964C1.7319 8.68452 0.884055 8.33333 0 8.33333L0 5ZM6.66667 8.33333V11.6667H15V13.3333H6.66667V15H11.6667V16.6667H6.66667V18.3333H11.6667V20H6.66667V21.6667H15V23.3333H6.66667V25H11.6667V26.6667H6.66667V31.6667H23.3333V8.33333H6.66667ZM35.8333 25.8333V28.3333H33.3333V25.8333H35.8333ZM32.5 17.5H30V16.6667C30 13.9 32.2333 11.6667 35 11.6667C37.7667 11.6667 40 13.9 40 16.6667C40 18.2833 39.1667 19.8 37.85 20.6833L37.35 21C36.4 21.6667 35.8333 22.7 35.8333 23.8333V24.1667H33.3333V23.8333C33.3333 21.85 34.3333 20 35.9833 18.9167L36.4667 18.6C37.1167 18.1667 37.5 17.45 37.5 16.6667C37.5 15.3 36.3833 14.1667 35 14.1667C33.6167 14.1667 32.5 15.2833 32.5 16.6667V17.5Z" fill="black" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Product Warranty</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Garansi penuh untuk kerusakan
-                                    produk</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M35 18.3332C35 27.5832 28.6 36.2332 20 38.3332C11.4 36.2332 5 27.5832 5 18.3332V8.33317L20 1.6665L35 8.33317V18.3332ZM20 34.9998C26.25 33.3332 31.6667 25.8998 31.6667 18.6998V10.4998L20 5.29984L8.33333 10.4998V18.6998C8.33333 25.8998 13.75 33.3332 20 34.9998ZM20 14.8165C22.6667 14.8165 24.8167 16.9665 24.8167 19.6332C24.8167 22.2998 22.6667 24.4498 20 24.4498C17.3333 24.4498 15.1833 22.2832 15.1833 19.6332C15.1833 16.9832 17.35 14.8165 20 14.8165ZM20 9.99984L22.3 13.3332C21.6 13.0332 20.8333 12.8832 20 12.8832C19.1667 12.8832 18.4167 13.0332 17.7 13.3332L20 9.99984ZM11.6667 14.8165L15.6667 14.4832C15.1 14.9998 14.5667 15.5665 14.1667 16.2665C13.75 16.9665 13.5 17.6998 13.3333 18.4665L11.6667 14.8165ZM11.6667 24.4498L13.3833 20.8332C13.5167 21.5498 13.7833 22.2998 14.1667 22.9998C14.5833 23.7165 15.1 24.3165 15.6667 24.7998L11.6667 24.4498ZM28.3333 14.8165L26.6667 18.4665C26.5 17.6998 26.2333 16.9665 25.8333 16.2665C25.4333 15.5665 24.9167 14.9998 24.3333 14.4665L28.3333 14.8165ZM28.3333 24.4498L24.3333 24.7832C24.9 24.2998 25.4167 23.6998 25.8333 22.9998C26.2333 22.2998 26.4833 21.5498 26.6167 20.8332L28.3333 24.4498ZM20 29.2498L17.6833 25.9498C18.4 26.1998 19.1667 26.3665 20 26.3665C20.8333 26.3665 21.5833 26.1998 22.2833 25.9498L20 29.2498Z" fill="black" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Question Resolved</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Pertanyaan secara langsung dibantu admin melalui chat</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- CONTACT OWNER -->
     <div class="container contact-owner mt-5 mb-3">
         <div class="text-center">
@@ -713,6 +558,7 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </div>
+
     <!-- FOOTER -->
     <footer class="ini-footer bg-white border-bottom border-top">
         <div class="container-fluid contain-footer">
@@ -777,20 +623,20 @@ if (!isset($_SESSION["login"])) {
                                 </div>
                             </div>
                             <!-- <div class="row">
-                                <div class="col">
-                                    <div>
+                                    <div class="col">
+                                        <div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col">
                                         
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    
-                                </div>
-                            </div> -->
+                                </div> -->
                         </div>
                     </div>
                 </div>
@@ -806,6 +652,7 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </footer>
+
 
     <!-- POPPER AND JS BOOSTRAP 5 -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

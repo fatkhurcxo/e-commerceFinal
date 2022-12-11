@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Comfortaa&family=Cutive+Mono&family=Lexend+Deca&family=Poppins&family=Unlock&family=Unna&family=Vidaloka&display=swap');
+
+.product-name {
+    font-size: 20px;
+    font-family: Unna;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.product-price {
+    font-family: Unna;
+    letter-spacing: 0.03em;
+    color: rgb(0, 56, 0);
+}
+
+.container-product {
+    background-color: rgb(240, 240, 240);
+}
+
+.product-name a {
+    text-decoration: none;
+    color: black;
+}
+
+.product-name a:hover {
+    color: #0AA1DD;
+}
+
+.product-price a {
+    text-decoration: none;
+    color: black;
+}
+
+.btn-keranjang {
+    background-color: #7895B2;
+    color: white;
+}
+
+.btn-keranjang:hover {
+    background-color: #8fb4d8;
+    color: white;
+}
+
+.btn-count:hover .svg-icon path {
+    fill: black;
+}
+
+.modal-btn {
+    margin-top: 75px;
+}

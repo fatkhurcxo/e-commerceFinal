@@ -9,6 +9,13 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+// $select_data = mysqli_query($db_connect, "SELECT * FROM raget_product");
+// if (!$select_data) {
+//     # code...
+//     echo mysqli_error($db_connect);
+// }
+$product = query("SELECT * FROM raget_product");
+
 
 ?>
 <!DOCTYPE html>
@@ -26,12 +33,14 @@ if (!isset($_SESSION["login"])) {
 
     <!-- css login-form -->
     <link rel="stylesheet" href="../css/index.css">
+
+    <!-- css detail produk -->
+    <link rel="stylesheet" href="../css/product-detail.css?v2">
 </head>
 
 <body>
-
     <!-- NAVIGASI -->
-    <nav class="navbar navbar-expand-md bg-light fixed-top">
+    <nav class="navbar navbar-expand-md bg-transparent fixed-top">
         <div class="container-fluid p-2 d-flex">
             <!-- <div class=""> -->
             <div class="nav-logo flex-fill d-flex align-items-center justify-content-between ms-sm-5">
@@ -64,12 +73,12 @@ if (!isset($_SESSION["login"])) {
                         </span>
                     </button>
                     <!-- <button class="navbar-toggler btn btn-sm" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarIcon" aria-controls="navbarNavDropdown" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon">
-
-                        </span>
-                    </button> -->
+                            data-bs-target="#navbarIcon" aria-controls="navbarNavDropdown" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon">
+    
+                            </span>
+                        </button> -->
                 </div>
             </div>
             <!-- </div> -->
@@ -78,14 +87,14 @@ if (!isset($_SESSION["login"])) {
                 <div class="nav-container nav-txt">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link nav-txt" aria-current="page" href="#">Home</a>
+                            <a class="nav-link nav-txt" aria-current="page" href="index.php">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle nav-txt" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Collection
                             </a>
                             <ul class="dropdown-menu text-black">
-                                <li><a class="dropdown-item" href="carrier.php">Carrier</a></li>
+                                <li><a class="dropdown-item" href="#">Carrier</a></li>
                                 <li><a class="dropdown-item" href="#">Backpack</a></li>
                                 <li><a class="dropdown-item" href="#">Sling Bag</a></li>
                             </ul>
@@ -128,7 +137,6 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </nav>
-
 
     <!-- NAVIGASI RESPONSIVE -->
     <nav class="nav-second fixed-bottom bg-light pt-3">
@@ -275,9 +283,8 @@ if (!isset($_SESSION["login"])) {
                         <h6>Fatkhur Rozak</h6>
                         <br>
                         <form action="" method="POST">
-                            <button type="submit" class="btn btn-outline-danger btn-sm ps-3 pe-3" name="log-out">Logout</button>
+                            <button type="submit" name="log-out" class="btn btn-outline-danger btn-sm ps-3 pe-3">Logout</button>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -408,292 +415,203 @@ if (!isset($_SESSION["login"])) {
         </div>
     </div>
 
-    <section class="section-1">
-        <div class="container-fluid">
-            <div class="row mt-5 mb-5">
-                <div class="col-md-6 ps-5 pe-5 d-flex align-items-lg-center pt-5 pt-md-0 pb-5 pb-md-0">
-                    <div class="container">
-                        <div class="row mb-5">
-                            <div class="col">
-                                <h1 class="display-5 ">Raget Bags</h1>
+    <!-- SECTION 1 -->
+    <section class="section-view container-fluid bg-white">
+        <div class="row">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-3 d-flex align-items-center justify-content-end">
+                        <div class="d-flex flex-column" id="btn-indicator">
+                            <div class="border rounded">
+                                <a class="" href="#item-1">
+                                    <button class="btn border-0">
+                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="border rounded mt-3">
+                                <a class="" href="#item-2">
+                                    <button class="btn border-0">
+                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="border rounded mt-3">
+                                <a class="" href="#item-3">
+                                    <button class="btn border-0">
+                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                    </button>
+                                </a>
                             </div>
                         </div>
-                        <div class="row jarak-text">
-                            <div class="col">
-                                <span>
-                                    <h3>Menjadi teman disetiap perjalananmu</h3>
-                                </span>
+                    </div>
+                    <div class="col overflow-hidden" style="height: 800px;">
+                        <div class="row row-cols-1 scrollspy-example-2" data-bs-spy="scroll" data-bs-target="#btn-indicator" data-bs-smooth-scroll="true" tabindex="0">
+                            <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-1" style="height: 800px;">
+                                <img src="../img-assets/product/marmoset.png" alt="" class="img-fluid" style="height: 500px;">
+                            </div>
+                            <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-2" style="height: 800px;">
+                                <img src="../img-assets/product/produk-1.png" alt="" class="img-fluid" style="height: 500px;">
+                            </div>
+                            <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-3" style="height: 800px;">
+                                <img src="../img-assets/product/streamline.png" alt="" class="img-fluid" style="height: 500px;">
                             </div>
                         </div>
-                        <div class="row mt-1">
+                    </div>
+                </div>
+            </div>
+            <div class="col bg-light d-flex align-items-center justify-content-center">
+                <div class="row row-cols-1 w-75">
+                    <div class="col">
+                        <h4 class="title">Raget Miniso</h4>
+                    </div>
+                    <div class="col">
+                        <h6 class="price">Rp1.000.000,00</h6>
+                    </div>
+                    <div class="col mt-5">
+                        <div class="row">
                             <div class="col">
-                                <span>
-                                    <h6>Temukan beragam model tas yang sesuai dengan kebutuhan perjalananmu</h6>
-                                </span>
+                                <div class="input-group input-group-sm">
+                                    <select class="form-select" name="" id="">
+                                        <option value="Red">Red</option>
+                                        <option value="Red">White</option>
+                                        <option value="Red">Orange</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mt-5">
-                            <div class="col d-flex">
-                                <div class="border-bottom btn-view-product">
-                                    <a href="" class="text-decoration-none text-black">
-                                        <span class="pe-3">Lihat produk</span>
-                                        <span>
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M3 11H17.17L13.59 7.41L15 6L21 12L15 18L13.59 16.58L17.17 13H3V11Z" fill="black" />
+                            <div class="col">
+                                <form method="POST" action="">
+                                    <div class="input-group input-group-sm border rounded d-flex">
+                                        <button class="btn btn-sm btn-count">
+                                            <svg class="svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M16 17.18L16 6.82005C16 6.03005 15.13 5.55005 14.46 5.98005L6.32 11.16C6.17749 11.2502 6.0601 11.375 5.97876 11.5227C5.89742 11.6705 5.85476 11.8364 5.85476 12.0051C5.85476 12.1737 5.89742 12.3396 5.97876 12.4874C6.0601 12.6351 6.17749 12.7599 6.32 12.8501L14.46 18.02C14.6108 18.1176 14.7852 18.1726 14.9647 18.1794C15.1442 18.1861 15.3222 18.1442 15.4799 18.0582C15.6376 17.9722 15.7691 17.8452 15.8607 17.6906C15.9522 17.5361 16.0004 17.3597 16 17.18V17.18Z" fill="#9F9F9F" />
                                             </svg>
-                                        </span>
+                                        </button>
+                                        <input type="text" name="count" class="form-control border-0 text-center" value="1" min="1" max="20">
+                                        <button class="btn btn-sm btn-count">
+                                            <svg class="svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8 6.81995V17.18C8 17.97 8.87 18.45 9.54 18.02L17.68 12.84C17.8225 12.7498 17.9399 12.625 18.0212 12.4773C18.1026 12.3295 18.1452 12.1636 18.1452 11.9949C18.1452 11.8263 18.1026 11.6604 18.0212 11.5126C17.9399 11.3649 17.8225 11.2401 17.68 11.1499L9.54 5.97995C9.38917 5.88239 9.2148 5.82736 9.0353 5.82064C8.85579 5.81393 8.6778 5.85579 8.52011 5.94181C8.36241 6.02782 8.23085 6.15481 8.13931 6.30936C8.04777 6.46392 7.99964 6.64032 8 6.81995V6.81995Z" fill="#9F9F9F" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mt-3">
+                        <div class="row">
+                            <div class="col col-8">
+                                <div class="bg-white">
+                                    <a href="">
+                                        <button class="btn text-dark masukkan border rounded-0 container"><span style="font-size: larger;">Masukkan Keranjang</span></button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="bg-bg-white">
+                                    <a href="">
+                                        <button class="btn rounded-0 border button-chat container">
+                                            <svg width="29" height="29" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M16.1875 12.7872C15.9075 13.1092 15.75 13.5537 15.75 13.9999C15.75 14.232 15.6578 14.4545 15.4937 14.6186C15.3296 14.7827 15.1071 14.8749 14.875 14.8749C14.643 14.8749 14.4204 14.7827 14.2563 14.6186C14.0922 14.4545 14 14.232 14 13.9999C14 13.1722 14.2818 12.3024 14.875 11.6304C15.4823 10.9409 16.38 10.4999 17.5 10.4999C18.62 10.4999 19.5178 10.9409 20.125 11.6304C20.7183 12.3042 21 13.1704 21 13.9999C21 14.8574 20.797 15.5224 20.4715 16.0824C20.1863 16.5707 19.8135 16.9574 19.5178 17.2672L19.4443 17.3424C19.1188 17.6837 18.8685 17.9619 18.6848 18.3119C18.5098 18.6462 18.375 19.0889 18.375 19.7627C18.375 19.9947 18.2828 20.2173 18.1187 20.3814C17.9546 20.5455 17.7321 20.6377 17.5 20.6377C17.268 20.6377 17.0454 20.5455 16.8813 20.3814C16.7172 20.2173 16.625 19.9947 16.625 19.7627C16.625 18.8317 16.8175 18.1054 17.1343 17.4999C17.444 16.9102 17.8518 16.4779 18.1808 16.1332L18.2193 16.0929C18.5483 15.7482 18.7828 15.5032 18.9595 15.2004C19.1258 14.9152 19.25 14.5547 19.25 13.9999C19.25 13.5537 19.0943 13.1074 18.8125 12.7872C18.5448 12.4844 18.13 12.2499 17.5 12.2499C16.87 12.2499 16.4553 12.4844 16.1875 12.7872ZM17.5 24.8709C17.6647 24.8772 17.8289 24.8501 17.9828 24.7914C18.1368 24.7327 18.2773 24.6435 18.396 24.5292C18.5147 24.4149 18.6091 24.2779 18.6736 24.1263C18.7381 23.9746 18.7713 23.8116 18.7713 23.6468C18.7713 23.482 18.7381 23.319 18.6736 23.1673C18.6091 23.0157 18.5147 22.8787 18.396 22.7644C18.2773 22.6501 18.1368 22.5609 17.9828 22.5022C17.8289 22.4435 17.6647 22.4164 17.5 22.4227C17.1751 22.4227 16.8635 22.5517 16.6338 22.7815C16.4041 23.0112 16.275 23.3228 16.275 23.6477C16.275 23.9726 16.4041 24.2841 16.6338 24.5139C16.8635 24.7436 17.1751 24.8727 17.5 24.8727V24.8709ZM3.50002 17.4999C3.50078 14.4406 4.50363 11.4658 6.35518 9.03037C8.20672 6.59498 10.805 4.83311 13.7527 4.01425C16.7004 3.19538 19.8352 3.3646 22.6776 4.49601C25.52 5.62742 27.9136 7.65875 29.4922 10.2793C31.0708 12.8999 31.7476 15.9654 31.419 19.007C31.0905 22.0486 29.7747 24.8989 27.6728 27.1219C25.571 29.3448 22.7988 30.8181 19.7804 31.3165C16.7619 31.8148 13.6633 31.3106 10.9585 29.8812L4.58852 31.4737C4.44191 31.5105 4.28826 31.5088 4.14254 31.4686C3.99681 31.4284 3.86399 31.3511 3.75701 31.2443C3.65003 31.1375 3.57255 31.0048 3.53211 30.8591C3.49167 30.7135 3.48966 30.5598 3.52627 30.4132L5.11876 24.0414C4.05248 22.0261 3.49667 19.78 3.50002 17.4999ZM17.5 5.24992C15.3622 5.24927 13.2614 5.80811 11.4064 6.87089C9.55148 7.93368 8.00696 9.4634 6.92637 11.308C5.84577 13.1527 5.26674 15.248 5.24681 17.3857C5.22688 19.5235 5.76675 21.6292 6.81276 23.4937C6.92262 23.6882 6.95393 23.9173 6.90027 24.1342L5.57727 29.4227L10.8658 28.0997C11.0826 28.046 11.3118 28.0773 11.5063 28.1872C13.1395 29.1021 14.9606 29.6306 16.8299 29.7319C18.6992 29.8333 20.5668 29.505 22.2894 28.772C24.012 28.0391 25.5437 26.9211 26.7668 25.504C27.99 24.0868 28.8721 22.4082 29.3454 20.597C29.8187 18.7858 29.8706 16.8902 29.497 15.0558C29.1235 13.2214 28.3346 11.4971 27.1908 10.0151C26.047 8.53318 24.5787 7.3331 22.8988 6.50705C21.2189 5.68099 19.372 5.25094 17.5 5.24992Z" fill="#7895B2" />
+                                            </svg>
+                                        </button>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col d-flex justify-content-center">
-                            <img class="img-fluid" src="../img-assets/section-1/produk-hero.png" alt="">
-                        </div>
+                    <div class="col mt-2">
+                        <button class="btn rounded-0 border btn-checkout container p-2" style="font-size: x-large;">Beli Sekarang</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-2 bg-white">
-        <div class="container-fluid p-3">
-            <div class="container text-center pt-5">
-                <h3>Popular Collection</h3>
-                <p>Produk tebaik yang menjadi unggulan kami</p>
-            </div>
-        </div>
-        <div class="container pb-3">
-            <div class="row">
-                <div class="col">
-                    <div class="row gx-5">
-                        <div class="col-md-6">
-                            <div class="">
-                                <img class="img-fluid mx-auto my-auto d-block rounded" src="../img-assets/section-2/hero-img.png" alt="">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mt-3 mt-md-0">
-                            <div>
-                                <div class="row row-cols-2 gy-3 gx-3">
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border rounded bg-light">
-                                            <a href="">
-                                                <img class="img-fluid" src="../img-assets/section-2/produk-1.PNG" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-3 mt-3 bg-white">
-        <figure class="figure">
-            <img class="figure-img img-fluid" src="../img-assets/section-3/bg-section-3.jpg" alt="">
-            <figcaption class="figure-caption p-2">
-                “ Tuhan menciptakan Alam semesta untuk dijadikan tempat merenung bagi orang-orang yang berfikir.”
-                <span style="font-weight: bold; font-style: italic;">- Raget Outdoor Camp</span>
-            </figcaption>
-        </figure>
-    </section>
-
-    <section class="section-4 mt-5">
-        <div class="row container-fluid d-flex flex-column-reverse flex-xl-row">
-            <div class="col d-flex store-desc">
-                <div class="row row-cols-1 justify-content-center">
-                    <div class="col col-xl-10">
-                        <h3>Raget Bags Store</h3>
-                        <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-                            has
-                            been the
-                            industry's standard dummy text
-                            ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                            make a
-                            type specimen book. It
-                            has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining
-                            essentially unchanged.</p>
-                    </div>
-                    <div class="col col-xl-10 alamat-toko mt-xl-0 mt-3">
-                        <div class="row">
-                            <div class="col-2">
-                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 2.5C19.1375 2.5 22.5 5.825 22.5 9.9375C22.5 15.5125 15 23.75 15 23.75C15 23.75 7.5 15.5125 7.5 9.9375C7.5 5.825 10.8625 2.5 15 2.5ZM15 7.5C14.337 7.5 13.7011 7.76339 13.2322 8.23223C12.7634 8.70107 12.5 9.33696 12.5 10C12.5 10.663 12.7634 11.2989 13.2322 11.7678C13.7011 12.2366 14.337 12.5 15 12.5C15.663 12.5 16.2989 12.2366 16.7678 11.7678C17.2366 11.2989 17.5 10.663 17.5 10C17.5 9.33696 17.2366 8.70107 16.7678 8.23223C16.2989 7.76339 15.663 7.5 15 7.5ZM25 23.75C25 26.5125 20.525 28.75 15 28.75C9.475 28.75 5 26.5125 5 23.75C5 22.1375 6.525 20.7 8.8875 19.7875L9.6875 20.925C8.3375 21.4875 7.5 22.2625 7.5 23.125C7.5 24.85 10.8625 26.25 15 26.25C19.1375 26.25 22.5 24.85 22.5 23.125C22.5 22.2625 21.6625 21.4875 20.3125 20.925L21.1125 19.7875C23.475 20.7 25 22.1375 25 23.75Z" fill="black" />
+                    <div class="col mt-2">
+                        <div class="back-icon float-start p-1">
+                            <a href="">
+                                <svg width="21" height="21" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14.9821 20.5836C14.8203 20.5841 14.6604 20.5484 14.5142 20.479C14.3679 20.4097 14.2391 20.3084 14.1371 20.1827L8.90465 13.6827C8.74531 13.4889 8.6582 13.2457 8.6582 12.9948C8.6582 12.7439 8.74531 12.5007 8.90465 12.3069L14.3213 5.80688C14.5052 5.58565 14.7694 5.44652 15.0559 5.42011C15.3424 5.3937 15.6276 5.48217 15.8488 5.66605C16.07 5.84993 16.2092 6.11417 16.2356 6.40063C16.262 6.6871 16.1735 6.97232 15.9896 7.19355L11.1471 13.0002L15.8271 18.8069C15.9596 18.9659 16.0438 19.1595 16.0696 19.3649C16.0955 19.5702 16.062 19.7787 15.9731 19.9656C15.8842 20.1525 15.7437 20.31 15.568 20.4195C15.3924 20.5291 15.1891 20.586 14.9821 20.5836Z" fill="#838383" />
                                 </svg>
-                            </div>
-                            <div class="col">
-                                <span class="fw-bold">
-                                    Jl. Pahlawan No.7c, Kwadengan Barat, Lemahputro, Kec. Sidoarjo, Kabupaten
-                                    Sidoarjo,
-                                    Jawa
-                                    Timur 61213
-                                </span>
+                            </a>
+                        </div>
+                        <div class="back-text float-start ms-3 p-1">
+                            <a href="" class="text-decoration-none">
+                                <span>Lihat produk lainnya</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-desc product-features mt-4 mb-2">
+        <div class="container">
+            <h4>Features</h4>
+            <div class="row gx-3">
+                <div class="col">
+                    <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
+                        <img src="../img-assets/product/streamline.png" alt="" style="height: 350px;" class="img-fluid">
+                    </div>
+                    <div class="border-bottom pt-3 pb-2 ps-1">
+                        <span style="font-weight: 500;">Two Side Pocket</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
+                        <img src="../img-assets/product/ragnarok.png" alt="" style="height: 350px;" class="img-fluid">
+                    </div>
+                    <div class="border-bottom pt-3 pb-2 ps-1">
+                        <span style="font-weight: 500;">Two Side Pocket</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
+                        <img src="../img-assets/product/streamline.png" alt="" style="height: 350px;" class="img-fluid">
+                    </div>
+                    <div class="border-bottom pt-3 pb-2 ps-1">
+                        <span style="font-weight: 500;">Two Side Pocket</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-detail mt-5 mb-5 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <h4>Detail Product</h4>
+                </div>
+                <div class="col">
+                    <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item border-0 rounded-0 border-top border-bottom">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    <span style="font-weight: 500;">Material</span>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
                             </div>
                         </div>
-                        <button type="button" data-bs-toggle="modal" class="btn btn-outline-success container-fluid mt-5" data-bs-target="#exampleModal">
-                            Lihat lokasi
-                        </button>
-
-                        <!-- MODAL -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Raget Store Maps</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1978.0212761638657!2d112.70842515535276!3d-7.460544748264502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e131e6f3c9cf%3A0x8ec18511b0001e91!2sPolije%20PDD%20Sidoarjo!5e0!3m2!1sid!2sid!4v1670237421599!5m2!1sid!2sid" class="container-fluid" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    </div>
+                        <div class="accordion-item border-0 border-bottom rounded-0">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    <span style="font-weight: 500;">Dimensions</span>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col store-img">
-                <figure class="figure">
-                    <img class="figure-img img-fluid" src="../img-assets/section-4/clark-street-mercantile-qnKhZJPKFD8-unsplash.jpg" alt="">
-                    <figcaption class="figure-caption">
-                        Offline store Raget Bags
-                    </figcaption>
-                </figure>
-            </div>
         </div>
     </section>
 
-    <section class="container-fluid section-5 mt-3">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-            <div class="col bg-success bg-left">
-            </div>
-            <div class="col d-flex align-items-center txt-left">
-                <div class="container w-75 p-3">
-                    <h4>Mountaineering</h4>
-                    <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                        been
-                        the
-                        industry's standard dummy text
-                        ever since the 1500s.
-                    </p>
-                    <button class="container mt-3 btn btn-left">
-                        Belanja sekarang
-                    </button>
-                </div>
-            </div>
-            <div class="col bg-warning bg-right">
-            </div>
-            <div class="col d-flex align-items-center txt-right">
-                <div class="container w-75 p-3">
-                    <h4>Traveling</h4>
-                    <p class="mt-5">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                        been
-                        the
-                        industry's standard dummy text
-                        ever since the 1500s.
-                    </p>
-                    <button class="container mt-3 btn btn-right">
-                        Belanja sekarang
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TAMBAHAN -->
-    <div class="container mt-5 tambahan border-bottom border-dark border-2">
-        <div class="row row-cols-1 row-cols-md-3">
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M33.333 13.3332H6.66634V9.99984H33.333M33.333 29.9998H6.66634V19.9998H33.333M33.333 6.6665H6.66634C4.81634 6.6665 3.33301 8.14984 3.33301 9.99984V29.9998C3.33301 30.8839 3.6842 31.7317 4.30932 32.3569C4.93444 32.982 5.78229 33.3332 6.66634 33.3332H33.333C34.2171 33.3332 35.0649 32.982 35.69 32.3569C36.3152 31.7317 36.6663 30.8839 36.6663 29.9998V9.99984C36.6663 9.11578 36.3152 8.26794 35.69 7.64281C35.0649 7.01769 34.2171 6.6665 33.333 6.6665Z" fill="black" />
-                            <path d="M17.0703 26.9766C17.112 26.9896 17.1536 26.9987 17.1953 27.0039C17.237 27.0065 17.2786 27.0078 17.3203 27.0078C17.4245 27.0078 17.5247 26.9935 17.6211 26.9648C17.7174 26.9362 17.8073 26.8958 17.8906 26.8438C17.9766 26.7891 18.0521 26.724 18.1172 26.6484C18.1849 26.5703 18.2396 26.4844 18.2812 26.3906L19.0625 27.1758C18.9635 27.3164 18.849 27.4427 18.7188 27.5547C18.5911 27.6667 18.4518 27.7617 18.3008 27.8398C18.1523 27.918 17.9948 27.9766 17.8281 28.0156C17.6641 28.0573 17.4948 28.0781 17.3203 28.0781C17.026 28.0781 16.7487 28.0234 16.4883 27.9141C16.2305 27.8047 16.0039 27.6523 15.8086 27.457C15.6159 27.2617 15.4635 27.0299 15.3516 26.7617C15.2396 26.4909 15.1836 26.194 15.1836 25.8711C15.1836 25.5404 15.2396 25.2383 15.3516 24.9648C15.4635 24.6914 15.6159 24.4583 15.8086 24.2656C16.0039 24.0729 16.2305 23.9232 16.4883 23.8164C16.7487 23.7096 17.026 23.6562 17.3203 23.6562C17.4948 23.6562 17.6654 23.6771 17.832 23.7188C17.9987 23.7604 18.1562 23.8203 18.3047 23.8984C18.4557 23.9766 18.5964 24.0729 18.7266 24.1875C18.8568 24.2995 18.9714 24.4258 19.0703 24.5664L17.0703 26.9766ZM17.6172 24.7773C17.5677 24.7591 17.5182 24.7474 17.4688 24.7422C17.4219 24.737 17.3724 24.7344 17.3203 24.7344C17.1745 24.7344 17.0365 24.7617 16.9062 24.8164C16.7786 24.8685 16.6667 24.944 16.5703 25.043C16.4766 25.1419 16.4023 25.2617 16.3477 25.4023C16.293 25.5404 16.2656 25.6966 16.2656 25.8711C16.2656 25.9102 16.2669 25.9544 16.2695 26.0039C16.2747 26.0534 16.2812 26.1042 16.2891 26.1562C16.2995 26.2057 16.3112 26.2539 16.3242 26.3008C16.3372 26.3477 16.3542 26.3893 16.375 26.4258L17.6172 24.7773ZM22.875 28H19.3867L21.1484 24.8867H19.3867V23.8242H22.875L21.1133 26.9375H22.875V28Z" fill="black" />
-                            <path d="M18.667 17.3332H19.2003C19.2003 17.5732 19.5657 17.7776 20.0003 17.7776C20.435 17.7776 20.8003 17.5732 20.8003 17.3332C20.8003 17.0887 20.523 16.9998 19.9363 16.8821C19.371 16.7643 18.667 16.6176 18.667 15.9998C18.667 15.6021 19.059 15.2643 19.6003 15.1509V14.6665H20.4003V15.1509C20.9417 15.2643 21.3337 15.6021 21.3337 15.9998H20.8003C20.8003 15.7598 20.435 15.5554 20.0003 15.5554C19.5657 15.5554 19.2003 15.7598 19.2003 15.9998C19.2003 16.2443 19.4777 16.3332 20.0643 16.4509C20.6297 16.5687 21.3337 16.7154 21.3337 17.3332C21.3337 17.7309 20.9417 18.0687 20.4003 18.1821V18.6665H19.6003V18.1821C19.059 18.0687 18.667 17.7309 18.667 17.3332Z" fill="white" />
-                            <path d="M24 17.6667H24.5333C24.5333 17.9067 24.8987 18.1111 25.3333 18.1111C25.768 18.1111 26.1333 17.9067 26.1333 17.6667C26.1333 17.4222 25.856 17.3333 25.2693 17.2156C24.704 17.0978 24 16.9511 24 16.3333C24 15.9356 24.392 15.5978 24.9333 15.4844V15H25.7333V15.4844C26.2747 15.5978 26.6667 15.9356 26.6667 16.3333H26.1333C26.1333 16.0933 25.768 15.8889 25.3333 15.8889C24.8987 15.8889 24.5333 16.0933 24.5333 16.3333C24.5333 16.5778 24.8107 16.6667 25.3973 16.7844C25.9627 16.9022 26.6667 17.0489 26.6667 17.6667C26.6667 18.0644 26.2747 18.4022 25.7333 18.5156V19H24.9333V18.5156C24.392 18.4022 24 18.0644 24 17.6667Z" fill="white" />
-                            <path d="M13 17.6667H13.5333C13.5333 17.9067 13.8987 18.1111 14.3333 18.1111C14.768 18.1111 15.1333 17.9067 15.1333 17.6667C15.1333 17.4222 14.856 17.3333 14.2693 17.2156C13.704 17.0978 13 16.9511 13 16.3333C13 15.9356 13.392 15.5978 13.9333 15.4844V15H14.7333V15.4844C15.2747 15.5978 15.6667 15.9356 15.6667 16.3333H15.1333C15.1333 16.0933 14.768 15.8889 14.3333 15.8889C13.8987 15.8889 13.5333 16.0933 13.5333 16.3333C13.5333 16.5778 13.8107 16.6667 14.3973 16.7844C14.9627 16.9022 15.6667 17.0489 15.6667 17.6667C15.6667 18.0644 15.2747 18.4022 14.7333 18.5156V19H13.9333V18.5156C13.392 18.4022 13 18.0644 13 17.6667Z" fill="white" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Easy Payment</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Pembayaran yang mudah dan terpercaya</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 5H30V8.33333C28.1667 8.33333 26.6667 9.83333 26.6667 11.6667V31.6667C26.6667 33.5167 25.1833 35 23.3333 35H6.66667C5.78261 35 4.93476 34.6488 4.30964 34.0237C3.68452 33.3986 3.33333 32.5507 3.33333 31.6667V11.6667C3.33333 10.7826 2.98214 9.93476 2.35702 9.30964C1.7319 8.68452 0.884055 8.33333 0 8.33333L0 5ZM6.66667 8.33333V11.6667H15V13.3333H6.66667V15H11.6667V16.6667H6.66667V18.3333H11.6667V20H6.66667V21.6667H15V23.3333H6.66667V25H11.6667V26.6667H6.66667V31.6667H23.3333V8.33333H6.66667ZM35.8333 25.8333V28.3333H33.3333V25.8333H35.8333ZM32.5 17.5H30V16.6667C30 13.9 32.2333 11.6667 35 11.6667C37.7667 11.6667 40 13.9 40 16.6667C40 18.2833 39.1667 19.8 37.85 20.6833L37.35 21C36.4 21.6667 35.8333 22.7 35.8333 23.8333V24.1667H33.3333V23.8333C33.3333 21.85 34.3333 20 35.9833 18.9167L36.4667 18.6C37.1167 18.1667 37.5 17.45 37.5 16.6667C37.5 15.3 36.3833 14.1667 35 14.1667C33.6167 14.1667 32.5 15.2833 32.5 16.6667V17.5Z" fill="black" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Product Warranty</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Garansi penuh untuk kerusakan
-                                    produk</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mt-2 mt-md-0">
-                <div class="row">
-                    <div class="col-lg-2 d-flex justify-content-center">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M35 18.3332C35 27.5832 28.6 36.2332 20 38.3332C11.4 36.2332 5 27.5832 5 18.3332V8.33317L20 1.6665L35 8.33317V18.3332ZM20 34.9998C26.25 33.3332 31.6667 25.8998 31.6667 18.6998V10.4998L20 5.29984L8.33333 10.4998V18.6998C8.33333 25.8998 13.75 33.3332 20 34.9998ZM20 14.8165C22.6667 14.8165 24.8167 16.9665 24.8167 19.6332C24.8167 22.2998 22.6667 24.4498 20 24.4498C17.3333 24.4498 15.1833 22.2832 15.1833 19.6332C15.1833 16.9832 17.35 14.8165 20 14.8165ZM20 9.99984L22.3 13.3332C21.6 13.0332 20.8333 12.8832 20 12.8832C19.1667 12.8832 18.4167 13.0332 17.7 13.3332L20 9.99984ZM11.6667 14.8165L15.6667 14.4832C15.1 14.9998 14.5667 15.5665 14.1667 16.2665C13.75 16.9665 13.5 17.6998 13.3333 18.4665L11.6667 14.8165ZM11.6667 24.4498L13.3833 20.8332C13.5167 21.5498 13.7833 22.2998 14.1667 22.9998C14.5833 23.7165 15.1 24.3165 15.6667 24.7998L11.6667 24.4498ZM28.3333 14.8165L26.6667 18.4665C26.5 17.6998 26.2333 16.9665 25.8333 16.2665C25.4333 15.5665 24.9167 14.9998 24.3333 14.4665L28.3333 14.8165ZM28.3333 24.4498L24.3333 24.7832C24.9 24.2998 25.4167 23.6998 25.8333 22.9998C26.2333 22.2998 26.4833 21.5498 26.6167 20.8332L28.3333 24.4498ZM20 29.2498L17.6833 25.9498C18.4 26.1998 19.1667 26.3665 20 26.3665C20.8333 26.3665 21.5833 26.1998 22.2833 25.9498L20 29.2498Z" fill="black" />
-                        </svg>
-                    </div>
-                    <div class="col text-center text-lg-start mt-3 mt-lg-0">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h5 class="judul">Question Resolved</h5>
-                            </div>
-                            <div class="col">
-                                <p class="desc">Pertanyaan secara langsung dibantu admin melalui chat</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- CONTACT OWNER -->
     <div class="container contact-owner mt-5 mb-3">
         <div class="text-center">
@@ -713,6 +631,7 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </div>
+
     <!-- FOOTER -->
     <footer class="ini-footer bg-white border-bottom border-top">
         <div class="container-fluid contain-footer">
@@ -777,20 +696,20 @@ if (!isset($_SESSION["login"])) {
                                 </div>
                             </div>
                             <!-- <div class="row">
-                                <div class="col">
-                                    <div>
+                                    <div class="col">
+                                        <div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col">
                                         
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    
-                                </div>
-                            </div> -->
+                                </div> -->
                         </div>
                     </div>
                 </div>
@@ -806,6 +725,7 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </footer>
+
 
     <!-- POPPER AND JS BOOSTRAP 5 -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>

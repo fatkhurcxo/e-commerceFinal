@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Comfortaa&family=Cutive+Mono&family=Lexend+Deca&family=Poppins&family=Unlock&family=Unna&family=Vidaloka&display=swap');
+
+.title {
+    font-family: Vidaloka;
+    font-size: xx-large;
+    letter-spacing: 0.02em;
+}
+
+.price {
+    font-family: Unna;
+    font-size: x-large;
+    letter-spacing: 0.02em;
+}
+
+.section-view {
+    font-family: Unna;
+    letter-spacing: 0.02em;
+}
+
+.btn-checkout {
+    background-color: #7895B2;
+    color: white;
+}
+
+.btn-checkout:hover {
+    background-color: #8fb4d8;
+    color: white;
+}
+
+.masukkan:hover {
+    background-color: rgb(226, 226, 226);
+}
+
+option {
+    font-size: 16px;
+}
+
+.button-chat:hover svg path {
+    fill: rgb(255, 0, 0);
+}
+
+.button-chat:hover {
+    background-color: rgb(226, 226, 226);
+}
+
+.back-text a {
+    color: lightslategray;
+}
+
+.back-text a:hover {
+    color: black;
+}
