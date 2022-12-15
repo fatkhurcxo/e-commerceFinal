@@ -1,14 +1,36 @@
 <?php
 session_start();
-require 'function.php';
-
-if (!isset($_SESSION["login"])) {
+if (!isset($_SESSION['customer'])) {
     # code...
-    echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
-    header("location:user-login.php");
+    echo "<script> alert('Anda harus login terlebih dahulu');
+                    document.location.href = 'user-login.php';
+            </script>";
     exit;
 }
+require 'function-final.php';
 
+if (isset($_POST['log-out'])) {
+    # code...
+    logoutRaget();
+}
+
+if (isset($_POST['tambah-avatar'])) {
+    # code...
+    if (addAvatar($_POST) > 0) {
+        # code...
+        echo "<script> alert('Berhasil upload gambar!');
+                    
+            </script>";
+    } else {
+        # code...
+        echo "<script> alert('KACAU!!!');
+            </script>";
+    }
+}
+// show data table akun
+$tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_akun]'");
+// show data table customer
+$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'")
 
 ?>
 <!DOCTYPE html>
@@ -25,7 +47,7 @@ if (!isset($_SESSION["login"])) {
     <link rel="icon" href="../img-assets/head-assets/raget-headIcon.png">
 
     <!-- css login-form -->
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/index.css?v7">
 </head>
 
 <body>
@@ -268,11 +290,11 @@ if (!isset($_SESSION["login"])) {
                 <div class="row row-cols-2 container-fluid border p-3 border rounded bg-light">
                     <div class="col-4 d-flex justify-content-center align-items-center">
                         <div class="profile-container">
-                            <img class="img-fluid rounded-circle" src="../img-assets/nav-assets/E41212120_Fatkhur Rozak_Teknik Informatika.jpg" alt="">
+                            <img class="img-fluid rounded-circle" src="../img-assets/user-profile/<?= $tableAkun['avatar']; ?>" alt="">
                         </div>
                     </div>
                     <div class="col-8">
-                        <h6>Fatkhur Rozak</h6>
+                        <h6><?= $tableAkun['username']; ?></h6>
                         <br>
                         <form action="" method="POST">
                             <button type="submit" class="btn btn-outline-danger btn-sm ps-3 pe-3" name="log-out">Logout</button>
@@ -303,11 +325,11 @@ if (!isset($_SESSION["login"])) {
                                 </div>
                                 <div class="col mt-3 border rounded pt-3">
                                     <p>
-                                        Fatkhur Rozak
+                                        <?= $tableCustomer['nama_customer']; ?>
                                         <br>
-                                        <span>fatkhurawe@gmail.com</span>
+                                        <span><?= $tableCustomer['email']; ?></span>
                                         <br>
-                                        <span>085784464441</span>
+                                        <span><?= $tableCustomer['nomor_hp']; ?></span>
                                     </p>
                                 </div>
                                 <div class="col mt-3">
@@ -319,7 +341,7 @@ if (!isset($_SESSION["login"])) {
                                 </div>
                                 <div class="col mt-3 border rounded pt-3">
                                     <p>
-                                        Jl. H. Mawardi, RT 03/ RW 01, Jerukgamping, Krian
+                                        <?= $tableCustomer['alamat']; ?>
                                     </p>
                                 </div>
                             </div>
@@ -407,6 +429,72 @@ if (!isset($_SESSION["login"])) {
             </div>
         </div>
     </div>
+
+
+    <!-- Modal Add Name and Profile -->
+    <div class="modal" id="mymodal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-body">
+                    <div class="top">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5>Raget Bags Store</h5>
+                    </div>
+                    <div class="row row-cols-1">
+                        <div class="col d-flex justify-content-center">
+                            <img class="img-fluid" src="../img-assets/bg-assets/2769504.jpg" alt="" width="300px">
+                        </div>
+                        <div class="col text-center">
+                            <h3>Halooo, sahabat Raget Bags tercinta</h3>
+                            <br>
+                            <span style="font-size: 20px; font-weight: 500;">Yuk lengkapi profilmu terlebih dahulu</span>
+                        </div>
+                        <div class="col mt-3 d-flex justify-content-center">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-datacustomer" class="btn modal-show container rounded-0 w-25">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-datacustomer" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-body">
+                    <div class="top border-bottom">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5>Tambahkan foto profilmu</h5>
+                    </div>
+                    <div class="row row-cols-1 mt-3">
+                        <div class="col d-flex justify-content-center">
+                            <div class="rounded-circle border" style="width: 250px; height: 250px;">
+                                <img class="img-fluid rounded-circle" src="../img-assets/user-profile/<?= $tableAkun['avatar']; ?>" alt="" style="height: 250px; width: 250px;">
+                            </div>
+                        </div>
+
+                        <!-- FORM TAMBAH AVATAR -->
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="col d-flex justify-content-center">
+                                <div class="mb-3 w-50">
+                                    <label for="formFileSm" class="form-label">Pilih fotomu</label>
+                                    <input class="form-control form-control-sm" id="formFileSm" type="file" name="user-profile">
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <button type="submit" class="btn btn-sm btn-outline-success" name="tambah-avatar">Gunakan</button>
+                            </div>
+                        </form>
+
+                        <div class="col mt-3 d-flex justify-content-center">
+                            <button type="button" class="btn modal-show container rounded-0 w-25">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <section class="section-1">
         <div class="container-fluid">
@@ -810,6 +898,10 @@ if (!isset($_SESSION["login"])) {
     <!-- POPPER AND JS BOOSTRAP 5 -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+
+    <script src="../javascript/index.js">
+    </script>
 </body>
 
 </html>

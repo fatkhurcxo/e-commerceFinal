@@ -1,20 +1,61 @@
 <?php
 session_start();
-require 'function.php';
 
-if (!isset($_SESSION["login"])) {
+if (!isset($_SESSION['customer'])) {
     # code...
-    echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
-    header("location:user-login.php");
+    echo "<script> alert('Anda harus login terlebih dahulu');
+                    document.location.href = 'user-login.php';
+            </script>";
     exit;
 }
 
+require 'function-final.php';
+
+// KETIKA TOMBOL LOG OUT DI KLIK
+if (isset($_POST['log-out'])) {
+    # code...
+    logoutRaget();
+}
+
+if (isset($_POST["masukKeranjang"])) {
+    # code...
+    if (tambahBarang($_POST) > 0) {
+        # code...
+        echo "<script> alert('Barang berhasil ditambahkan:)'); </script>";
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+}
+
+// UNUTUK MENGAMBIL ID DARI PRODUK YANG DIPILIH
+$idProdukImage = $_GET["id"];
+
+$id_akun = $_SESSION["id_akun"];
+// var_dump($id_akun);
+// die;
+
+// DATA GAMBAR PRODUK
+$produkImage = showDataTable("SELECT * FROM produk_image WHERE id_produk_image=$idProdukImage");
+
+$idProduk = $produkImage["id_produk"];
+
+// DATA PRODUK
+$produkData = showDataTable("SELECT harga, id_produk, nama FROM produk WHERE id_produk=$idProduk");
+
+// DATA VARIAN PRODUK
+$varianProduk = showDataTable("SELECT * FROM produk_varian WHERE id_produk=$idProduk");
+
+// SHOW HARGA DALAM FORMAT
+$hargaFormat = showDataTable("SELECT FORMAT(harga, 2) FROM produk WHERE id_produk=$idProduk");
+// var_dump($produkImage);
+// die;
 // $select_data = mysqli_query($db_connect, "SELECT * FROM raget_product");
 // if (!$select_data) {
 //     # code...
 //     echo mysqli_error($db_connect);
 // }
-$product = query("SELECT * FROM raget_product");
+
 
 
 ?>
@@ -425,21 +466,21 @@ $product = query("SELECT * FROM raget_product");
                             <div class="border rounded">
                                 <a class="" href="#item-1">
                                     <button class="btn border-0">
-                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                        <img src="../img-assets/product/<?= $produkImage["hero_img"]; ?>" alt="" style="height: 75px;">
                                     </button>
                                 </a>
                             </div>
                             <div class="border rounded mt-3">
                                 <a class="" href="#item-2">
                                     <button class="btn border-0">
-                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                        <img src="../img-assets/product/<?= $produkImage["second_img"]; ?>" alt="" style="height: 75px;">
                                     </button>
                                 </a>
                             </div>
                             <div class="border rounded mt-3">
                                 <a class="" href="#item-3">
                                     <button class="btn border-0">
-                                        <img src="../img-assets/product/marmoset.png" alt="" style="height: 75px;">
+                                        <img src="../img-assets/product/<?= $produkImage["third_img"]; ?>" alt="" style="height: 75px;">
                                     </button>
                                 </a>
                             </div>
@@ -448,13 +489,13 @@ $product = query("SELECT * FROM raget_product");
                     <div class="col overflow-hidden" style="height: 800px;">
                         <div class="row row-cols-1 scrollspy-example-2" data-bs-spy="scroll" data-bs-target="#btn-indicator" data-bs-smooth-scroll="true" tabindex="0">
                             <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-1" style="height: 800px;">
-                                <img src="../img-assets/product/marmoset.png" alt="" class="img-fluid" style="height: 500px;">
+                                <img src="../img-assets/product/<?= $produkImage["hero_img"]; ?>" alt="" class="img-fluid" style="height: 500px;">
                             </div>
                             <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-2" style="height: 800px;">
-                                <img src="../img-assets/product/produk-1.png" alt="" class="img-fluid" style="height: 500px;">
+                                <img src="../img-assets/product/<?= $produkImage["second_img"]; ?>" alt="" class="img-fluid" style="height: 500px;">
                             </div>
                             <div class="col d-flex pt-5 pb-5 justify-content-center align-items-center" id="item-3" style="height: 800px;">
-                                <img src="../img-assets/product/streamline.png" alt="" class="img-fluid" style="height: 500px;">
+                                <img src="../img-assets/product/<?= $produkImage["third_img"]; ?>" alt="" class="img-fluid" style="height: 500px;">
                             </div>
                         </div>
                     </div>
@@ -463,66 +504,66 @@ $product = query("SELECT * FROM raget_product");
             <div class="col bg-light d-flex align-items-center justify-content-center">
                 <div class="row row-cols-1 w-75">
                     <div class="col">
-                        <h4 class="title">Raget Miniso</h4>
+                        <h4 class="title"><?= $produkData["nama"]; ?></h4>
                     </div>
                     <div class="col">
-                        <h6 class="price">Rp1.000.000,00</h6>
+                        <h6 class="price">Rp<?= $hargaFormat["FORMAT(harga, 2)"]; ?></h6>
                     </div>
-                    <div class="col mt-5">
-                        <div class="row">
-                            <div class="col">
-                                <div class="input-group input-group-sm">
-                                    <select class="form-select" name="" id="">
-                                        <option value="Red">Red</option>
-                                        <option value="Red">White</option>
-                                        <option value="Red">Orange</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <form method="POST" action="">
-                                    <div class="input-group input-group-sm border rounded d-flex">
-                                        <button class="btn btn-sm btn-count">
-                                            <svg class="svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16 17.18L16 6.82005C16 6.03005 15.13 5.55005 14.46 5.98005L6.32 11.16C6.17749 11.2502 6.0601 11.375 5.97876 11.5227C5.89742 11.6705 5.85476 11.8364 5.85476 12.0051C5.85476 12.1737 5.89742 12.3396 5.97876 12.4874C6.0601 12.6351 6.17749 12.7599 6.32 12.8501L14.46 18.02C14.6108 18.1176 14.7852 18.1726 14.9647 18.1794C15.1442 18.1861 15.3222 18.1442 15.4799 18.0582C15.6376 17.9722 15.7691 17.8452 15.8607 17.6906C15.9522 17.5361 16.0004 17.3597 16 17.18V17.18Z" fill="#9F9F9F" />
-                                            </svg>
-                                        </button>
-                                        <input type="text" name="count" class="form-control border-0 text-center" value="1" min="1" max="20">
-                                        <button class="btn btn-sm btn-count">
-                                            <svg class="svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M8 6.81995V17.18C8 17.97 8.87 18.45 9.54 18.02L17.68 12.84C17.8225 12.7498 17.9399 12.625 18.0212 12.4773C18.1026 12.3295 18.1452 12.1636 18.1452 11.9949C18.1452 11.8263 18.1026 11.6604 18.0212 11.5126C17.9399 11.3649 17.8225 11.2401 17.68 11.1499L9.54 5.97995C9.38917 5.88239 9.2148 5.82736 9.0353 5.82064C8.85579 5.81393 8.6778 5.85579 8.52011 5.94181C8.36241 6.02782 8.23085 6.15481 8.13931 6.30936C8.04777 6.46392 7.99964 6.64032 8 6.81995V6.81995Z" fill="#9F9F9F" />
-                                            </svg>
-                                        </button>
+                    <form action="" method="POST">
+                        <input type="hidden" name="idAkun" value="<?= $id_akun; ?>">
+                        <input type="hidden" name="idProduk" value="<?= $produkData["id_produk"]; ?>">
+                        <input type="hidden" name="heroImg" value="<?= $produkImage["hero_img"]; ?>">
+                        <input type="hidden" name="namaProduk" value="<?= $produkData["nama"]; ?>">
+                        <input type="hidden" name="hargaProduk" value="<?= $produkData["harga"]; ?>">
+                        <div class="col mt-5">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-select" name="selected-varian" id="">
+                                            <option value="<?= $varianProduk["varian_1"]; ?>"><?= $varianProduk["varian_1"]; ?></option>
+                                            <option value="<?= $varianProduk["varian_2"]; ?>"><?= $varianProduk["varian_2"]; ?></option>
+                                            <option value="<?= $varianProduk["varian_3"]; ?>"><?= $varianProduk["varian_3"]; ?></option>
+                                        </select>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mt-3">
-                        <div class="row">
-                            <div class="col col-8">
-                                <div class="bg-white">
-                                    <a href="">
-                                        <button class="btn text-dark masukkan border rounded-0 container"><span style="font-size: larger;">Masukkan Keranjang</span></button>
-                                    </a>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="bg-bg-white">
-                                    <a href="">
-                                        <button class="btn rounded-0 border button-chat container">
-                                            <svg width="29" height="29" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16.1875 12.7872C15.9075 13.1092 15.75 13.5537 15.75 13.9999C15.75 14.232 15.6578 14.4545 15.4937 14.6186C15.3296 14.7827 15.1071 14.8749 14.875 14.8749C14.643 14.8749 14.4204 14.7827 14.2563 14.6186C14.0922 14.4545 14 14.232 14 13.9999C14 13.1722 14.2818 12.3024 14.875 11.6304C15.4823 10.9409 16.38 10.4999 17.5 10.4999C18.62 10.4999 19.5178 10.9409 20.125 11.6304C20.7183 12.3042 21 13.1704 21 13.9999C21 14.8574 20.797 15.5224 20.4715 16.0824C20.1863 16.5707 19.8135 16.9574 19.5178 17.2672L19.4443 17.3424C19.1188 17.6837 18.8685 17.9619 18.6848 18.3119C18.5098 18.6462 18.375 19.0889 18.375 19.7627C18.375 19.9947 18.2828 20.2173 18.1187 20.3814C17.9546 20.5455 17.7321 20.6377 17.5 20.6377C17.268 20.6377 17.0454 20.5455 16.8813 20.3814C16.7172 20.2173 16.625 19.9947 16.625 19.7627C16.625 18.8317 16.8175 18.1054 17.1343 17.4999C17.444 16.9102 17.8518 16.4779 18.1808 16.1332L18.2193 16.0929C18.5483 15.7482 18.7828 15.5032 18.9595 15.2004C19.1258 14.9152 19.25 14.5547 19.25 13.9999C19.25 13.5537 19.0943 13.1074 18.8125 12.7872C18.5448 12.4844 18.13 12.2499 17.5 12.2499C16.87 12.2499 16.4553 12.4844 16.1875 12.7872ZM17.5 24.8709C17.6647 24.8772 17.8289 24.8501 17.9828 24.7914C18.1368 24.7327 18.2773 24.6435 18.396 24.5292C18.5147 24.4149 18.6091 24.2779 18.6736 24.1263C18.7381 23.9746 18.7713 23.8116 18.7713 23.6468C18.7713 23.482 18.7381 23.319 18.6736 23.1673C18.6091 23.0157 18.5147 22.8787 18.396 22.7644C18.2773 22.6501 18.1368 22.5609 17.9828 22.5022C17.8289 22.4435 17.6647 22.4164 17.5 22.4227C17.1751 22.4227 16.8635 22.5517 16.6338 22.7815C16.4041 23.0112 16.275 23.3228 16.275 23.6477C16.275 23.9726 16.4041 24.2841 16.6338 24.5139C16.8635 24.7436 17.1751 24.8727 17.5 24.8727V24.8709ZM3.50002 17.4999C3.50078 14.4406 4.50363 11.4658 6.35518 9.03037C8.20672 6.59498 10.805 4.83311 13.7527 4.01425C16.7004 3.19538 19.8352 3.3646 22.6776 4.49601C25.52 5.62742 27.9136 7.65875 29.4922 10.2793C31.0708 12.8999 31.7476 15.9654 31.419 19.007C31.0905 22.0486 29.7747 24.8989 27.6728 27.1219C25.571 29.3448 22.7988 30.8181 19.7804 31.3165C16.7619 31.8148 13.6633 31.3106 10.9585 29.8812L4.58852 31.4737C4.44191 31.5105 4.28826 31.5088 4.14254 31.4686C3.99681 31.4284 3.86399 31.3511 3.75701 31.2443C3.65003 31.1375 3.57255 31.0048 3.53211 30.8591C3.49167 30.7135 3.48966 30.5598 3.52627 30.4132L5.11876 24.0414C4.05248 22.0261 3.49667 19.78 3.50002 17.4999ZM17.5 5.24992C15.3622 5.24927 13.2614 5.80811 11.4064 6.87089C9.55148 7.93368 8.00696 9.4634 6.92637 11.308C5.84577 13.1527 5.26674 15.248 5.24681 17.3857C5.22688 19.5235 5.76675 21.6292 6.81276 23.4937C6.92262 23.6882 6.95393 23.9173 6.90027 24.1342L5.57727 29.4227L10.8658 28.0997C11.0826 28.046 11.3118 28.0773 11.5063 28.1872C13.1395 29.1021 14.9606 29.6306 16.8299 29.7319C18.6992 29.8333 20.5668 29.505 22.2894 28.772C24.012 28.0391 25.5437 26.9211 26.7668 25.504C27.99 24.0868 28.8721 22.4082 29.3454 20.597C29.8187 18.7858 29.8706 16.8902 29.497 15.0558C29.1235 13.2214 28.3346 11.4971 27.1908 10.0151C26.047 8.53318 24.5787 7.3331 22.8988 6.50705C21.2189 5.68099 19.372 5.25094 17.5 5.24992Z" fill="#7895B2" />
-                                            </svg>
-                                        </button>
-                                    </a>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-4 me-3">
+                                            Jumlah
+                                        </div>
+                                        <div class="col">
+                                            <input required type="text" autocomplete="off" name="jumlahBarang" placeholder="0" class="form-control border form-control-sm border-0 text-center" min="1" max="20">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col mt-2">
-                        <button class="btn rounded-0 border btn-checkout container p-2" style="font-size: x-large;">Beli Sekarang</button>
-                    </div>
+                        <div class="col mt-3">
+                            <div class="row">
+                                <div class="col col-8">
+                                    <div class="bg-white">
+                                        <a href="">
+                                            <button type="submit" name="masukKeranjang" class="btn text-dark masukkan border rounded-0 container"><span style="font-size: larger;">Masukkan Keranjang</span></button>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="bg-bg-white">
+                                        <a href="">
+                                            <button class="btn rounded-0 border button-chat container">
+                                                <svg width="29" height="29" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M16.1875 12.7872C15.9075 13.1092 15.75 13.5537 15.75 13.9999C15.75 14.232 15.6578 14.4545 15.4937 14.6186C15.3296 14.7827 15.1071 14.8749 14.875 14.8749C14.643 14.8749 14.4204 14.7827 14.2563 14.6186C14.0922 14.4545 14 14.232 14 13.9999C14 13.1722 14.2818 12.3024 14.875 11.6304C15.4823 10.9409 16.38 10.4999 17.5 10.4999C18.62 10.4999 19.5178 10.9409 20.125 11.6304C20.7183 12.3042 21 13.1704 21 13.9999C21 14.8574 20.797 15.5224 20.4715 16.0824C20.1863 16.5707 19.8135 16.9574 19.5178 17.2672L19.4443 17.3424C19.1188 17.6837 18.8685 17.9619 18.6848 18.3119C18.5098 18.6462 18.375 19.0889 18.375 19.7627C18.375 19.9947 18.2828 20.2173 18.1187 20.3814C17.9546 20.5455 17.7321 20.6377 17.5 20.6377C17.268 20.6377 17.0454 20.5455 16.8813 20.3814C16.7172 20.2173 16.625 19.9947 16.625 19.7627C16.625 18.8317 16.8175 18.1054 17.1343 17.4999C17.444 16.9102 17.8518 16.4779 18.1808 16.1332L18.2193 16.0929C18.5483 15.7482 18.7828 15.5032 18.9595 15.2004C19.1258 14.9152 19.25 14.5547 19.25 13.9999C19.25 13.5537 19.0943 13.1074 18.8125 12.7872C18.5448 12.4844 18.13 12.2499 17.5 12.2499C16.87 12.2499 16.4553 12.4844 16.1875 12.7872ZM17.5 24.8709C17.6647 24.8772 17.8289 24.8501 17.9828 24.7914C18.1368 24.7327 18.2773 24.6435 18.396 24.5292C18.5147 24.4149 18.6091 24.2779 18.6736 24.1263C18.7381 23.9746 18.7713 23.8116 18.7713 23.6468C18.7713 23.482 18.7381 23.319 18.6736 23.1673C18.6091 23.0157 18.5147 22.8787 18.396 22.7644C18.2773 22.6501 18.1368 22.5609 17.9828 22.5022C17.8289 22.4435 17.6647 22.4164 17.5 22.4227C17.1751 22.4227 16.8635 22.5517 16.6338 22.7815C16.4041 23.0112 16.275 23.3228 16.275 23.6477C16.275 23.9726 16.4041 24.2841 16.6338 24.5139C16.8635 24.7436 17.1751 24.8727 17.5 24.8727V24.8709ZM3.50002 17.4999C3.50078 14.4406 4.50363 11.4658 6.35518 9.03037C8.20672 6.59498 10.805 4.83311 13.7527 4.01425C16.7004 3.19538 19.8352 3.3646 22.6776 4.49601C25.52 5.62742 27.9136 7.65875 29.4922 10.2793C31.0708 12.8999 31.7476 15.9654 31.419 19.007C31.0905 22.0486 29.7747 24.8989 27.6728 27.1219C25.571 29.3448 22.7988 30.8181 19.7804 31.3165C16.7619 31.8148 13.6633 31.3106 10.9585 29.8812L4.58852 31.4737C4.44191 31.5105 4.28826 31.5088 4.14254 31.4686C3.99681 31.4284 3.86399 31.3511 3.75701 31.2443C3.65003 31.1375 3.57255 31.0048 3.53211 30.8591C3.49167 30.7135 3.48966 30.5598 3.52627 30.4132L5.11876 24.0414C4.05248 22.0261 3.49667 19.78 3.50002 17.4999ZM17.5 5.24992C15.3622 5.24927 13.2614 5.80811 11.4064 6.87089C9.55148 7.93368 8.00696 9.4634 6.92637 11.308C5.84577 13.1527 5.26674 15.248 5.24681 17.3857C5.22688 19.5235 5.76675 21.6292 6.81276 23.4937C6.92262 23.6882 6.95393 23.9173 6.90027 24.1342L5.57727 29.4227L10.8658 28.0997C11.0826 28.046 11.3118 28.0773 11.5063 28.1872C13.1395 29.1021 14.9606 29.6306 16.8299 29.7319C18.6992 29.8333 20.5668 29.505 22.2894 28.772C24.012 28.0391 25.5437 26.9211 26.7668 25.504C27.99 24.0868 28.8721 22.4082 29.3454 20.597C29.8187 18.7858 29.8706 16.8902 29.497 15.0558C29.1235 13.2214 28.3346 11.4971 27.1908 10.0151C26.047 8.53318 24.5787 7.3331 22.8988 6.50705C21.2189 5.68099 19.372 5.25094 17.5 5.24992Z" fill="#7895B2" />
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mt-2">
+                            <button class="btn rounded-0 border btn-checkout container p-2" style="font-size: x-large;">Beli Sekarang</button>
+                        </div>
+                    </form>
                     <div class="col mt-2">
                         <div class="back-icon float-start p-1">
                             <a href="">
@@ -532,7 +573,7 @@ $product = query("SELECT * FROM raget_product");
                             </a>
                         </div>
                         <div class="back-text float-start ms-3 p-1">
-                            <a href="" class="text-decoration-none">
+                            <a href="carrier.php" class="text-decoration-none">
                                 <span>Lihat produk lainnya</span>
                             </a>
                         </div>
@@ -548,26 +589,26 @@ $product = query("SELECT * FROM raget_product");
             <div class="row gx-3">
                 <div class="col">
                     <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
-                        <img src="../img-assets/product/streamline.png" alt="" style="height: 350px;" class="img-fluid">
+                        <img src="../img-assets/product/<?= $produkImage["features_1_img"]; ?>" alt="" style="height: 350px;" class="img-fluid">
                     </div>
                     <div class="border-bottom pt-3 pb-2 ps-1">
-                        <span style="font-weight: 500;">Two Side Pocket</span>
+                        <span style="font-weight: 500;"><?= $produkImage["features1_desc"]; ?></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
-                        <img src="../img-assets/product/ragnarok.png" alt="" style="height: 350px;" class="img-fluid">
+                        <img src="../img-assets/product/<?= $produkImage["features_2_img"]; ?>" alt="" style="height: 350px;" class="img-fluid">
                     </div>
                     <div class="border-bottom pt-3 pb-2 ps-1">
-                        <span style="font-weight: 500;">Two Side Pocket</span>
+                        <span style="font-weight: 500;"><?= $produkImage["features2_desc"]; ?></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="border bg-light d-flex justify-content-center pt-3 pb-3">
-                        <img src="../img-assets/product/streamline.png" alt="" style="height: 350px;" class="img-fluid">
+                        <img src="../img-assets/product/<?= $produkImage["features_3_img"]; ?>" alt="" style="height: 350px;" class="img-fluid">
                     </div>
                     <div class="border-bottom pt-3 pb-2 ps-1">
-                        <span style="font-weight: 500;">Two Side Pocket</span>
+                        <span style="font-weight: 500;"><?= $produkImage["features3_desc"]; ?></span>
                     </div>
                 </div>
             </div>
@@ -590,7 +631,7 @@ $product = query("SELECT * FROM raget_product");
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
                                 <div class="accordion-body">
-                                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <span><?= $produkImage["material"]; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -602,7 +643,7 @@ $product = query("SELECT * FROM raget_product");
                             </h2>
                             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <span><?= $produkImage["dimension"]; ?></span>
                                 </div>
                             </div>
                         </div>

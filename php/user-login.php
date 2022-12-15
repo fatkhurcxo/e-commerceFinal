@@ -1,6 +1,30 @@
 <?php
+session_start();
+if (isset($_SESSION["customer"])) {
+    # code...
+    header("location:index.php");
+    exit;
+}
+// require 'function.php';
+require 'function-final.php';
 
-require 'function.php';
+if (isset($_POST["register"])) {
+    # code...
+
+    if (registerRaget($_POST) > 0) {
+        # code...
+        echo "<script> alert('Akun anda berhasil dibuat'); </script>";
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+}
+
+if (isset($_POST["login"])) {
+    # code...
+    loginRaget($_POST);
+}
+
 
 ?>
 
@@ -105,14 +129,14 @@ require 'function.php';
                     <!-- REGISTER -->
                     <form action="" method="POST">
                         <div class="modal-body container-fluid">
-                            <div class="input-group">
+                            <!-- <div class="input-group">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Nama
                                             Lengkap</span></label>
                                     <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan nama lengkap anda" name="namaLengkap" autocomplete="off">
                                 </div>
-                            </div>
-                            <div class="input-group mt-3">
+                            </div> -->
+                            <div class="input-group">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Username</span></label>
                                     <input type="text" id="usernameInput" class="form-control" placeholder="Masukkan username" name="reg-uname" autocomplete="off">
@@ -124,7 +148,7 @@ require 'function.php';
                                     <input type="password" id="usernameInput" class="form-control" placeholder="Masukkan password" name="reg-pass">
                                 </div>
                             </div>
-                            <div class="input-group mt-3">
+                            <div class="input-group mt-3 mb-3">
                                 <div class="form-group container">
                                     <label for="usernameInput" class="mb-2"><span style="font-weight: bold;">Confirm
                                             Password</span></label>
@@ -142,7 +166,7 @@ require 'function.php';
         </div>
 
         <!-- Modal login Akun -->
-        <form method="POST" id="form-untukLogin">
+        <form method="POST" id="form-untukLogin" enctype="multipart/form-data">
             <div class="modal fade" id="modal-login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">

@@ -1,6 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Comfortaa&family=Cutive+Mono&family=Lexend+Deca&family=Poppins&family=Unlock&family=Unna&family=Vidaloka&display=swap');
 
 
+/* MODAL LENGKAPI PROFILE */
+.modal-show {
+    background-color: #7895B2;
+    color: white;
+}
+
+.modal-show:hover {
+    background-color: #5793cf;
+    color: white;
+}
+
 /* NAVBAR */
 
 nav {

@@ -2,12 +2,12 @@
 session_start();
 require 'function.php';
 
-if (!isset($_SESSION["login"])) {
-    # code...
-    echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
-    header("location:user-login.php");
-    exit;
-}
+// if (!isset($_SESSION["login"])) {
+//     # code...
+//     echo "<script> alert('Anda harus login terlebih dahulu'); </script>";
+//     header("location:user-login.php");
+//     exit;
+// }
 
 // $select_data = mysqli_query($db_connect, "SELECT * FROM raget_product");
 // if (!$select_data) {
@@ -16,6 +16,8 @@ if (!isset($_SESSION["login"])) {
 // }
 $product = query("SELECT * FROM raget_product");
 
+var_dump($product);
+die;
 
 ?>
 <!DOCTYPE html>

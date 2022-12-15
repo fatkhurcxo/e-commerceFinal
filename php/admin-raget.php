@@ -1,16 +1,20 @@
 <?php
 
 session_start();
-require 'function.php';
+// if (!isset($_SESSION['admin'])) {
+//     # code...
+//     echo "<script> alert('Anda bukan admin!!!'); 
+//                     document.location.href = 'user-login.php';
+//             </script>";
+//     exit();
+// }
 
-if (!isset($_SESSION["admin"])) {
+require 'function-final.php';
+// $product = query("SELECT * FROM raget_product");
+if (isset($_POST['log-out'])) {
     # code...
-    echo "<script> alert('Anda bukan admin!!!'); </script>";
-    exit();
+    logoutRaget();
 }
-
-$product = query("SELECT * FROM raget_product");
-
 
 ?>
 <!DOCTYPE html>
@@ -20,7 +24,7 @@ $product = query("SELECT * FROM raget_product");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Data</title>
+    <title>Raget Store Admin</title>
     <!-- head icon -->
     <link rel="icon" href="../img-assets/head-assets/raget-headIcon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
