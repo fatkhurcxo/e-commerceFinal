@@ -27,10 +27,49 @@ if (isset($_POST['tambah-avatar'])) {
             </script>";
     }
 }
+
+if (isset($_POST["btn-tambahDataCustomer"])) {
+    # code...
+    if (dataCustomer($_POST) > 0) {
+        # code...
+        echo "<script> alert('Berhasil menambahkan data!');
+                    
+            </script>";
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+    // var_dump($_POST);
+    // die;
+}
+
+if (isset($_POST["ubahDataCustomer"])) {
+    // var_dump($_POST);
+    // die;
+    # code...
+    if (ubahDataCustomer($_POST) > 0) {
+        # code...
+        echo "<script> alert('Berhasil mengubah data!');
+
+            </script>";
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+}
 // show data table akun
 $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_akun]'");
 // show data table customer
-$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'")
+$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
+
+$totalKeranjang = showDataTable("SELECT FORMAT(SUM(total), 2) Subtotal
+                                    FROM keranjang_belanja
+                                        WHERE id_akun='$_SESSION[id_akun]'");
+
+// SHOW DATA KERANJANG BELANJA
+$cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_akun]'");
+
+
 
 ?>
 <!DOCTYPE html>
@@ -196,56 +235,56 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
         </div>
         <div class="offcanvas-body overflow-auto">
             <!-- PRODUK LIST -->
-            <div class="product-list border-bottom container-fluid d-flex align-items-center">
-                <div class="row">
-                    <div class="col-4 d-flex align-items-center">
-                        <img src="../img-assets/section-2/produk-1.png" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-8">
-                        <div class="row row-cols-1">
-                            <div class="col">
-                                <h6 class="title">Eiger Ragnarok 80L</h6>
-                            </div>
-                            <div class="col">
-                                <span id="desc-whishlist">Color : <span>Hitam</span></span>
-                            </div>
-                            <div class="col pt-2">
-                                <div class="row row-cols-3 align-items-center">
-                                    <div class="col-2">
-                                        <button class="btn btn-outline-dark btn-sm">
-                                            -
-                                        </button>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="border text-center rounded">
-                                            2
+            <?php foreach ($cart as $row) : ?>
+                <div class="product-list border-bottom container-fluid d-flex align-items-center">
+                    <div class="row">
+                        <div class="col-4 d-flex align-items-center">
+                            <img src="../img-assets/product/<?= $row["hero_img"]; ?>" class="img-fluid" alt="">
+                        </div>
+                        <div class="col-8">
+                            <div class="row row-cols-1 mt-3">
+                                <div class="col">
+                                    <h6 class="title"><?= $row["nama_produk"]; ?></h6>
+                                </div>
+                                <div class="col">
+                                    <span id="desc-whishlist">Color : <span><?= $row["varian"]; ?></span></span>
+                                </div>
+                                <div class="col pt-2">
+                                    <div class="row row-cols-3 align-items-center">
+                                        <div class="col-2">
+                                            <button class="btn btn-outline-dark btn-sm">
+                                                -
+                                            </button>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" name="jumlahBarang" class="form-control form-control-sm text-center" value="<?= $row["jumlah"]; ?>">
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-outline-dark btn-sm">
+                                                +
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="col-2">
-                                        <button class="btn btn-outline-dark btn-sm">
-                                            +
-                                        </button>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="col pt-3 pb-4">
-                                <div class="row d-flex align-items-center">
-                                    <div class="col product-price">
-                                        <h6 class="pt-1 price">Rp2.429.400,00</h6>
-                                    </div>
-                                    <div class="col-2 rounded bg-light delete-list d-flex justify-content-center p-1">
-                                        <button class="btn btn-sm" id="dlt-whislist">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M19 4H15.5L14.5 3H9.5L8.5 4H5V6H19M6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19V7H6V19Z" fill="black" />
-                                            </svg>
-                                        </button>
+                                <div class="col pt-3 pb-4">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col product-price">
+                                            <h6 class="pt-1 price">Rp<?= $row["total"]; ?></h6>
+                                        </div>
+                                        <div class="col-2 rounded bg-light delete-list d-flex justify-content-center p-1">
+                                            <a href="delete.php?id_keranjang=<?= $row["id_keranjangBelanja"]; ?>" class="btn btn-sm" id="dlt-whislist">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M19 4H15.5L14.5 3H9.5L8.5 4H5V6H19M6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19V7H6V19Z" fill="black" />
+                                                </svg>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
         <!-- CART NAV -->
         <div class="cart-nav">
@@ -259,7 +298,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                 </div>
                                 <div class="col-10 text-end">
                                     <span>
-                                        <h6>Rp2.429.400,00</h6>
+                                        <h6>Rp<?= $totalKeranjang["Subtotal"]; ?></h6>
                                     </span>
                                 </div>
                             </div>
@@ -269,6 +308,45 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                 Checkout
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL UBAH INFORMASI DATA DIRI -->
+    <div class="modal" id="modal-datacustomerUbah" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-body">
+                    <div class="top border-bottom">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5>Informasi Akun</h5>
+                    </div>
+                    <div class="row row-cols-1 mt-2">
+                        <form action="" method="POST">
+                            <div class="col mb-2">
+                                <input autocomplete="off" name="id_akun" type="hidden" class="form-control" id="exampleFormControlInput1" value="<?= $_SESSION["id_akun"]; ?>">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">Nama Lengkap</label>
+                                <input autocomplete="off" name="nama_customer" type="text" class="form-control" id="exampleFormControlInput1" value="<?= $tableCustomer["nama_customer"]; ?>">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput2" class="form-label">Email</label>
+                                <input autocomplete="off" name="email" type="email" class="form-control" id="exampleFormControlInput2" placeholder="username@gmail.com" value="<?= $tableCustomer["email"]; ?>">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput3" class="form-label">Nomor Handphone</label>
+                                <input autocomplete="off" name="nomor_hp" type="text" class="form-control" id="exampleFormControlInput3" placeholder="08xxxxxxxxxx" value="<?= $tableCustomer["nomor_hp"]; ?>">
+                            </div>
+                            <div class="col">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alamat</label>
+                                <textarea name="alamat" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= $tableCustomer["alamat"]; ?></textarea>
+                            </div>
+                            <div class="col mt-3 d-flex justify-content-center">
+                                <button name="ubahDataCustomer" type="submit" class="btn modal-show container rounded-0 w-25">Ubah</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -319,7 +397,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                             <strong>Informasi Kontak</strong>
                                         </div>
                                         <div class="col-2">
-                                            <button class="btn btn-primary btn-sm">Ubah</button>
+                                            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal-datacustomerUbah">Ubah</button>
                                         </div>
                                     </div>
                                 </div>
@@ -450,7 +528,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                             <span style="font-size: 20px; font-weight: 500;">Yuk lengkapi profilmu terlebih dahulu</span>
                         </div>
                         <div class="col mt-3 d-flex justify-content-center">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-datacustomer" class="btn modal-show container rounded-0 w-25">Next</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-datacustomer1" class="btn modal-show container rounded-0 w-25">Next</button>
                         </div>
                     </div>
                 </div>
@@ -458,7 +536,8 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
         </div>
     </div>
 
-    <div class="modal" id="modal-datacustomer" data-bs-backdrop="static" tabindex="-1">
+    <!-- SLIDE KEDUA -->
+    <div class="modal" id="modal-datacustomer1" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-0">
                 <div class="modal-body">
@@ -487,8 +566,48 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                         </form>
 
                         <div class="col mt-3 d-flex justify-content-center">
-                            <button type="button" class="btn modal-show container rounded-0 w-25">Next</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-datacustomer2" class="btn modal-show container rounded-0 w-25">Next</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE KETIGA -->
+    <div class="modal" id="modal-datacustomer2" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-body">
+                    <div class="top border-bottom">
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5>Informasi Akun</h5>
+                    </div>
+                    <div class="row row-cols-1 mt-2">
+                        <form action="" method="POST">
+                            <div class="col mb-2">
+                                <input autocomplete="off" name="id_akun" type="hidden" class="form-control" id="exampleFormControlInput1" value="<?= $_SESSION["id_akun"]; ?>">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput1" class="form-label">Nama Lengkap</label>
+                                <input autocomplete="off" name="nama_customer" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nama lengkap anda">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput2" class="form-label">Email</label>
+                                <input autocomplete="off" name="email" type="email" class="form-control" id="exampleFormControlInput2" placeholder="username@gmail.com">
+                            </div>
+                            <div class="col mb-2">
+                                <label for="exampleFormControlInput3" class="form-label">Nomor Handphone</label>
+                                <input autocomplete="off" name="nomor_hp" type="text" class="form-control" id="exampleFormControlInput3" placeholder="08xxxxxxxxxx">
+                            </div>
+                            <div class="col">
+                                <label for="exampleFormControlTextarea1" class="form-label">Alamat</label>
+                                <textarea name="alamat" class="form-control" id="exampleFormControlTextarea1" placeholder="Jalan, RT/RW, Desa, Kecamatan, Kabupaten, Provinsi (Kode Pos)" rows="3"></textarea>
+                            </div>
+                            <div class="col mt-3 d-flex justify-content-center">
+                                <button name="btn-tambahDataCustomer" type="submit" class="btn modal-show container rounded-0 w-25">Selesai</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

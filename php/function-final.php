@@ -232,3 +232,56 @@ function tambahBarang($dataBarang)
 
     return mysqli_affected_rows($dconn);
 }
+
+// TAMBAH DATA CUSTOMER
+function dataCustomer($dataCustomer)
+{
+    global $dconn;
+
+    $id_akun = $dataCustomer["id_akun"];
+    $nama_customer = $dataCustomer["nama_customer"];
+    $email = $dataCustomer["email"];
+    $nomor_hp = $dataCustomer["nomor_hp"];
+    $alamat = $dataCustomer["alamat"];
+
+    $query = "INSERT INTO customer VALUES ('', $id_akun, '$nama_customer', '$email', '$nomor_hp', '$alamat')";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+// UBAH DATA CUSTOMER
+function ubahDataCustomer($ubahdataCustomer)
+{
+    global $dconn;
+
+    $id_akun = $ubahdataCustomer["id_akun"];
+    $nama_customer = $ubahdataCustomer["nama_customer"];
+    $email = $ubahdataCustomer["email"];
+    $nomor_hp = $ubahdataCustomer["nomor_hp"];
+    $alamat = $ubahdataCustomer["alamat"];
+
+    $query = "UPDATE customer
+                SET nama_customer='$nama_customer', email='$email', nomor_hp='$nomor_hp', alamat='$alamat'
+                    WHERE id_akun=$id_akun";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+
+// DELETE KERANJANG
+function deleteKeranjang($idKeranjang)
+{
+    global $dconn;
+
+    $query = "DELETE FROM keranjang_belanja WHERE id_keranjangBelanja = $idKeranjang";
+
+    mysqli_query($dconn, $query);
+
+    $script = "<script> window.history.back(); </script>";
+
+    echo $script;
+}

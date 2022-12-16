@@ -4,6 +4,11 @@ if (isset($_SESSION["customer"])) {
     # code...
     header("location:index.php");
     exit;
+} elseif (
+    isset($_SESSION["admin"])
+) {
+    # code...
+    header("location:admin-raget.php");
 }
 // require 'function.php';
 require 'function-final.php';
