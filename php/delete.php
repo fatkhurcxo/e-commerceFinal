@@ -6,6 +6,7 @@ $id_keranjang = $_GET["id_keranjang"];
 
 deleteKeranjang($id_keranjang);
 
+
 // if (deleteKeranjang($id_keranjang) > 0) {
 //     echo "<script> alert('Keranjang dihapus');
 //                     window.history.back();

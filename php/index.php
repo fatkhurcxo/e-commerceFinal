@@ -16,10 +16,11 @@ if (isset($_POST['log-out'])) {
 
 if (isset($_POST['tambah-avatar'])) {
     # code...
+
     if (addAvatar($_POST) > 0) {
         # code...
         echo "<script> alert('Berhasil upload gambar!');
-                    
+                        window.history.replaceState( null, null, window.location.href );
             </script>";
     } else {
         # code...
@@ -33,7 +34,7 @@ if (isset($_POST["btn-tambahDataCustomer"])) {
     if (dataCustomer($_POST) > 0) {
         # code...
         echo "<script> alert('Berhasil menambahkan data!');
-                    
+                            window.history.replaceState( null, null, window.location.href );
             </script>";
     } else {
         # code...
@@ -50,24 +51,51 @@ if (isset($_POST["ubahDataCustomer"])) {
     if (ubahDataCustomer($_POST) > 0) {
         # code...
         echo "<script> alert('Berhasil mengubah data!');
-
+                            window.history.replaceState( null, null, window.location.href );
             </script>";
     } else {
         # code...
         echo mysqli_error($dconn);
     }
 }
-// show data table akun
+
+if (isset($_POST["btn-checkout"])) {
+    # code...
+    if (($_POST) > 0) {
+        # code...
+        header("location:order-form.php");
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+}
+
+if (isset($_POST["unggahbukti"])) {
+    # code...
+
+}
+
+// TABEL AKUN
 $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_akun]'");
-// show data table customer
+
+// TABEL CUSTOMER
 $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
 
+// TABEL KERANJANG TOTAL
 $totalKeranjang = showDataTable("SELECT FORMAT(SUM(total), 2) Subtotal
                                     FROM keranjang_belanja
                                         WHERE id_akun='$_SESSION[id_akun]'");
 
 // SHOW DATA KERANJANG BELANJA
 $cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_akun]'");
+
+// TABLE PESANAN LOOPING
+$idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
+
+// TABEL PESANAN
+$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2) FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
+
+
 
 
 
@@ -304,9 +332,13 @@ $cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_ak
                             </div>
                         </div>
                         <div class="col mt-3 mb-3">
-                            <button class="btn container checkout-btn p-2" id="Checkout">
-                                Checkout
-                            </button>
+                            <form action="" method="POST">
+                                <input type="hidden" name="id_akun" value="<?= $id_akun; ?>">
+                                <input type="hidden" name="totalBelanja" value="<?= $SubtotalKeranjang["Subtotal"]; ?>">
+                                <button type="submit" name="btn-checkout" class="btn container checkout-btn p-2" id="Checkout">
+                                    Checkout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -434,73 +466,79 @@ $cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_ak
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#daftarPesanan">
                         <div class="accordion-body">
-                            <div class="row border pt-2 row-cols-1">
-                                <div class="col border-bottom">
-                                    <h6>No. Pesanan</h6>
-                                </div>
-                                <div class="col">
-                                    <div class="row pt-3 pb-3">
-                                        <div class="col-4 d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid" src="../img-assets/section-2/produk-1.png" alt="">
-                                        </div>
-                                        <div class="col">
-                                            <div class="row row-cols-1">
-                                                <div class="col">
-                                                    <h6>Eiger Equator Trek 65L</h6>
+                            <?php foreach ($pesanan as $data) : ?>
+                                <div class="row mt-2 pt-2 row-cols-1 mt-3" style="border: 1px solid #7895B2;">
+                                    <div class="col border-bottom">
+                                        <h6>Kode Pesanan : <?= $data["no_pesanan"]; ?></h6>
+                                    </div>
+                                    <div class="col">
+                                        <?php
+
+                                        $ordered = showData("SELECT * FROM ordered WHERE id_pesanan=$data[id_pesanan]");
+                                        ?>
+                                        <?php foreach ($ordered as $produk) :  ?>
+                                            <div class="row pt-3 pb-3">
+                                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                                    <img class="img-fluid" src="../img-assets/product/<?= $produk["hero_img"]; ?>" alt="">
                                                 </div>
                                                 <div class="col">
-                                                    <div class="row justify-content-between">
-                                                        <div class="col-4">
-                                                            <span>White</span>
+                                                    <div class="row row-cols-1">
+                                                        <div class="col">
+                                                            <h6><?= $produk["nama_produk"]; ?></h6>
                                                         </div>
-                                                        <div class="col-3 text-end">
-                                                            <span>x 1</span>
+                                                        <div class="col">
+                                                            <div class="row justify-content-between">
+                                                                <div class="col-4">
+                                                                    <span><?= $produk["varian"]; ?></span>
+                                                                </div>
+                                                                <div class="col-3 text-end">
+                                                                    <span>x <?= $produk["jumlah"]; ?></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col border-top mt-3 pt-1 text-end">
+                                                            <span>Rp<?= $produk["total"]; ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col border-top mt-3 pt-1 text-end">
-                                                    <span>Rp2.429.400,00</span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <div class="">
+                                            <div class="row row-cols-2">
+                                                <div class="col d-flex justify-content-between">
+                                                    <span>Status</span>
+                                                    <span> :</span>
+                                                </div>
+                                                <div class="col text-end text-danger">
+                                                    <?= $data["status"]; ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="row row-cols-2">
+                                        <div class="row bg-light pt-3 pb-3 rounded mt-2">
                                             <div class="col d-flex justify-content-between">
-                                                <span>Status</span>
+                                                <span>Total pesanan</span>
                                                 <span> :</span>
                                             </div>
-                                            <div class="col text-end text-danger">
-                                                Belum dibayar
+                                            <div class="col text-end">
+                                                <strong>Rp<?= $data["FORMAT(total_pesanan, 2)"]; ?></strong>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row bg-light pt-3 pb-3 rounded mt-2">
-                                        <div class="col-5">
-                                            Total pesanan:
-                                        </div>
-                                        <div class="col text-end">
-                                            <strong>Rp2.429.400,00</strong>
-                                        </div>
-                                    </div>
 
-                                    <!-- UNGGAH BNUKTI PEMBAYARAN -->
-                                    <form action="" method="POST">
-                                        <div class="mb-3" id="input-bukti">
-                                            <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                        <!-- UNGGAH BNUKTI PEMBAYARAN -->
+                                        <form action="unggah-bukti.php?id_pesanan=<?= $data["id_pesanan"]; ?>" method="POST" enctype="multipart/form-data">
+                                            <div class="mb-3" id="input-bukti">
+                                                <input class="form-control form-control-sm" id="formFileSm" name="bukti" type="file">
+                                            </div>
+                                            <div class="unggah float-end mb-2">
+                                                <button name="unggahbukti" class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
+                                            </div>
+                                        </form>
+                                        <div class="cara-bayar pt-2">
+                                            <a style="font-size: small;" class="text-decoration-none" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
                                         </div>
-                                        <div class="unggah float-end mb-2">
-                                            <button class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
-                                        </div>
-                                        <!-- <div class="btn-bayar d-flex justify-content-end align-items-center mt-2 mb-2">
-
-                                        </div> -->
-                                    </form>
-                                    <div class="cara-bayar pt-2">
-                                        <a class="" href="">Lihat cara pembayaran</a>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>

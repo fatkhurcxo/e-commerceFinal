@@ -17,21 +17,23 @@ require 'function-final.php';
 $id_akun = $_SESSION["id_akun"];
 // echo "<script> window.history.replaceState( null, null, window.location.href ); </script>";
 
-
-// if ($_POST) {
-//     # code...
-//     if (tambahBarang($_POST) > 0) {
-//         # code...
-//         echo "<script>alert ('berhasil tambah barang');</script>";
-//         // echo mysqli_insert_id($dconn);
-//         // $id_pesananBaru = mysqli_insert_id($dconn);
-//         // $pesananBaru = showDataTable("SELECT * FROM keranjang_belanja WHERE id_keranjangBelanja=$id_pesananBaru");
-
-//     }
-// } else {
-//     # code...
-//     echo "<script>alert ('tidak ada');</script>";
-// }
+if (isset($_POST["btn-beliSekarang"])) {
+    # code...
+    if (orderedbeliSekarng($_POST) > 0) {
+        # code...
+        echo "<script>alert ('berhasil tambah barang');
+                                window.history.replaceState( null, null, window.location.href );
+                </script>";
+        $id_orderedBaru = mysqli_insert_id($dconn);
+        $pesananBaru = showDataTable("SELECT * FROM ordered WHERE id_ordered=$id_orderedBaru");
+    } else {
+        # code...
+        echo mysqli_error($dconn);
+    }
+} else {
+    # code...
+    // echo "<script>alert ('tidak ada');</script>";
+}
 
 if (!isset($_SESSION['customer'])) {
     # code...
@@ -50,18 +52,13 @@ if (isset($_POST["buatPesanan"])) {
         echo "<script> alert('Berhasil Buat Pesanan');
                         window.history.replaceState( null, null, window.location.href );
                 </script>";
-        if (orderedProduk($id_akun) > 0) {
+        $id_pesananYangTerbuat = mysqli_insert_id($dconn);
+        if (updateOrderedBeliSekarang($id_pesananYangTerbuat) > 0) {
             # code...
-            echo "<script> alert('Berhasil tambah ordered!');
-                            window.history.replaceState( null, null, window.location.href );
-                    </script>";
-            if (delete($id_akun) > 0) {
-                # code...
-                echo "<script> alert('Berhasil delete keranjang!');
-                                window.history.replaceState( null, null, window.location.href );
-                                    window.history.go(-2);
-                        </script>";
-            }
+            echo "<script> alert('Berhasil Update Orderd');
+                        window.history.replaceState( null, null, window.location.href );
+                            window.history.go(-2);
+                </script>";
         } else {
             # code...
             echo mysqli_error($dconn);
@@ -74,6 +71,12 @@ if (isset($_POST["buatPesanan"])) {
 
 if (isset($_POST["btn-kembali"])) {
     # code...
+    if (deleteOrdered() > 0) {
+        # code...
+        echo "<script>alert ('Berhasil hapus ordered  ya guysss!');
+                        window.history.go(-2);
+                </script>";
+    }
 }
 // $totalPesanan = $_POST["totalBelanja"];
 
@@ -147,7 +150,7 @@ $validTotalPesanan = showDataTable("SELECT SUM(total) Subtotal
                 <!-- FORM INPUT DETAIL PESANAN -->
                 <form action="" method="POST">
                     <input type="hidden" name="idAkun" value="<?= $id_akun; ?>">
-                    <input type="hidden" name="totalPembayaran" value="<?= $validTotalPesanan["Subtotal"]; ?>">
+                    <input type="hidden" name="totalPembayaran" value="<?= $pesananBaru["total"]; ?>">
                     <div class="row row-cols-1 border rounded">
                         <div class="col mt-2">
                             <label for="namaPenerima" class="form-label" style="font-weight: 500;">Nama Penerima</label>
@@ -185,7 +188,7 @@ $validTotalPesanan = showDataTable("SELECT SUM(total) Subtotal
                         <div class="col mt-3 mb-3">
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" onclick="history.go(-1);" class="btn btn-kembali" name="btn-kembali">
+                                    <button type="submit" class="btn btn-kembali" name="btn-kembali">
                                         <div class="row">
                                             <div class="col">
                                                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -213,32 +216,30 @@ $validTotalPesanan = showDataTable("SELECT SUM(total) Subtotal
                         <span style="font-weight: 500;">Daftar Pesanan</span></span>
                     </div>
                     <div class="col">
-                        <?php foreach ($dataKeranjang as $row) : ?>
-                            <div class="row border-bottom pt-2 pb-3">
-                                <div class="col-2 bg-light d-flex justify-content-center">
-                                    <!-- KESALAHAN VARIABLE BELI SEKARANG -->
-                                    <img class="" src="../img-assets/product/<?= $row["hero_img"]; ?>" alt="" height="110px">
-                                </div>
-                                <div class="col">
-                                    <div class="row row-cols-1 align-items-center">
-                                        <div class="col">
-                                            <h5><?= $row["nama_produk"]; ?></h5>
+                        <div class="row border-bottom pt-2 pb-3">
+                            <div class="col-2 bg-light d-flex justify-content-center">
+                                <!-- KESALAHAN VARIABLE BELI SEKARANG -->
+                                <img class="" src="../img-assets/product/<?= $pesananBaru["hero_img"]; ?>" alt="" height="110px">
+                            </div>
+                            <div class="col">
+                                <div class="row row-cols-1 align-items-center">
+                                    <div class="col">
+                                        <h5><?= $pesananBaru["nama_produk"]; ?></h5>
+                                    </div>
+                                    <div class="col">
+                                        <span>Varian: <?= $pesananBaru["varian"]; ?></span>
+                                    </div>
+                                    <div class="col mt-4">
+                                        <div class="float-start">
+                                            <h6>Rp<?= $pesananBaru["total"]; ?></h6>
                                         </div>
-                                        <div class="col">
-                                            <span>Varian: <?= $row["varian"]; ?></span>
-                                        </div>
-                                        <div class="col mt-4">
-                                            <div class="float-start">
-                                                <h6>Rp<?= $row["total"]; ?></h6>
-                                            </div>
-                                            <div class="float-end">
-                                                x <?= $row["jumlah"]; ?>
-                                            </div>
+                                        <div class="float-end">
+                                            x <?= $pesananBaru["jumlah"]; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        </div>
                     </div>
                     <div class="col border-bottom pb-2 pt-2">
                         <div class="row row-cols-1" style="font-weight: 500;">
@@ -247,7 +248,7 @@ $validTotalPesanan = showDataTable("SELECT SUM(total) Subtotal
                                     <span>Subtotal</span>
                                 </div>
                                 <div class="float-end">
-                                    Rp<?= $totalKeranjang["Subtotal"]; ?>
+                                    Rp<?= $pesananBaru["total"]; ?>
                                 </div>
                             </div>
                             <div class="col mt-2">
@@ -265,7 +266,7 @@ $validTotalPesanan = showDataTable("SELECT SUM(total) Subtotal
                             <h4>Total</h4>
                         </div>
                         <div class="float-end">
-                            <h4>Rp<?= $totalKeranjang["Subtotal"]; ?></h4>
+                            <h4>Rp<?= $pesananBaru["total"]; ?></h4>
                         </div>
                     </div>
                 </div>

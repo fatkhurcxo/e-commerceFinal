@@ -11,6 +11,16 @@ if (!isset($_SESSION['customer'])) {
 
 require 'function-final.php';
 
+// if (deleteBack($_POST) > 0) {
+//     # code...
+//     echo "<script> alert('Berhasil kembali!'); </script>";
+// } else {
+//     # code...
+//     echo "<script> alert('Ada yang error!');
+//                     window.history.back();
+//             </script>";
+// }
+
 // KETIKA TOMBOL LOG OUT DI KLIK
 if (isset($_POST['log-out'])) {
     # code...
@@ -21,7 +31,10 @@ if (isset($_POST["masukKeranjang"])) {
     # code...
     if (tambahBarang($_POST) > 0) {
         # code...
-        echo "<script> alert('Barang berhasil ditambahkan:)'); </script>";
+        echo "<script> alert('Barang berhasil ditambahkan:)');
+                            window.history.replaceState( null, null, window.location.href );
+                                window.location.reload();
+                </script>";
     } else {
         # code...
         echo mysqli_error($dconn);
@@ -42,18 +55,36 @@ if (isset($_POST["ubahDataCustomer"])) {
         echo mysqli_error($dconn);
     }
 }
+
+if (isset($_POST["btn-beliSekarang"])) {
+    # code...
+    // DISINI MASALAHNYA
+    // if (tambahBarang($_POST) > 0) {
+    //     # code...
+    //     echo "<script> alert('Barang berhasil ditambahkan:)');
+    //                         window.history.replaceState( null, null, window.location.href );
+    //             </script>";
+    // } else {
+    //     # code...
+    //     echo mysqli_error($dconn);
+    // }
+}
 // UNUTUK MENGAMBIL ID DARI PRODUK YANG DIPILIH
 $idProdukImage = $_GET["id"];
+// DATA GAMBAR PRODUK
 
+if (isset($_POST["btn-checkout"])) {
+    # code...
+    echo "<script> window.history.replaceState( null, null, window.location.href ); </script>";
+    $_SESSION["id_produk"] = $_GET["id"];
+}
+
+$pesanan = showData("SELECT * FROM pesanan");
 $id_akun = $_SESSION["id_akun"];
 // var_dump($id_akun);
 // die;
-
-// DATA GAMBAR PRODUK
 $produkImage = showDataTable("SELECT * FROM produk_image WHERE id_produk_image=$idProdukImage");
-
 $idProduk = $produkImage["id_produk"];
-
 // DATA PRODUK
 $produkData = showDataTable("SELECT harga, id_produk, nama FROM produk WHERE id_produk=$idProduk");
 
@@ -68,14 +99,24 @@ $totalKeranjang = showDataTable("SELECT FORMAT(SUM(total), 2) Subtotal
                                     FROM keranjang_belanja
                                         WHERE id_akun=$id_akun");
 
+$SubtotalKeranjang = showDataTable("SELECT SUM(total) Subtotal
+                                        FROM keranjang_belanja
+                                            WHERE id_akun=$id_akun");
+
+// var_dump($SubtotalKeranjang["Subtotal"]);
+// die;
 // SHOW DATA KERANJANG BELANJA
 $cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_akun]'");
+
 
 // SHOW DATA UNTUK INFORMASI AKUN
 $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_akun]'");
 
 // SHOW DATA UNTUK INFORMASI CUSTOMER
-$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'")
+$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
+
+// TABEL PESANAN
+$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2) FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
 
 ?>
 <!DOCTYPE html>
@@ -264,7 +305,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                             </button>
                                         </div>
                                         <div class="col-8">
-                                            <input type="text" name="jumlahBarang" class="form-control form-control-sm text-center" value="<?= $row["jumlah"]; ?>">
+                                            <input type="number" name="jumlahBarang" class="form-control form-control-sm text-center" value="<?= $row["jumlah"]; ?>">
                                         </div>
                                         <div class="col-2">
                                             <button class="btn btn-outline-dark btn-sm">
@@ -311,9 +352,12 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                             </div>
                         </div>
                         <div class="col mt-3 mb-3">
-                            <button class="btn container checkout-btn p-2" id="Checkout">
+                            <!-- <form action="order-form.php" method="POST"> -->
+                            <!-- <input type="hidden" name="totalBelanja" value="<?= $SubtotalKeranjang["Subtotal"]; ?>"> -->
+                            <a href="order-form.php" type="submit" name="btn-checkout" class="btn container checkout-btn p-2" id="Checkout">
                                 Checkout
-                            </button>
+                            </a>
+                            <!-- </form> -->
                         </div>
                     </div>
                 </div>
@@ -441,73 +485,79 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#daftarPesanan">
                         <div class="accordion-body">
-                            <div class="row border pt-2 row-cols-1">
-                                <div class="col border-bottom">
-                                    <h6>No. Pesanan</h6>
-                                </div>
-                                <div class="col">
-                                    <div class="row pt-3 pb-3">
-                                        <div class="col-4 d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid" src="../img-assets/section-2/produk-1.png" alt="">
-                                        </div>
-                                        <div class="col">
-                                            <div class="row row-cols-1 border">
-                                                <div class="col border">
-                                                    <h6>Eiger Equator Trek 65L</h6>
+                            <?php foreach ($pesanan as $data) : ?>
+                                <div class="row mt-2 pt-2 row-cols-1" style="border: 1px solid #7895B2;">
+                                    <div class="col">
+                                        <h6>Kode Pesanan : <?= $data["no_pesanan"]; ?></h6>
+                                    </div>
+                                    <div class="col">
+                                        <?php
+
+                                        $ordered = showData("SELECT * FROM ordered WHERE id_pesanan=$data[id_pesanan]");
+                                        ?>
+                                        <?php foreach ($ordered as $produk) :  ?>
+                                            <div class="row pt-3 pb-3">
+                                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                                    <img class="img-fluid" src="../img-assets/product/<?= $produk["hero_img"]; ?>" alt="">
                                                 </div>
-                                                <div class="col border">
-                                                    <div class="row justify-content-between">
-                                                        <div class="col-4">
-                                                            <span>White</span>
+                                                <div class="col">
+                                                    <div class="row row-cols-1">
+                                                        <div class="col">
+                                                            <h6><?= $produk["nama_produk"]; ?></h6>
                                                         </div>
-                                                        <div class="col-3 text-end">
-                                                            <span>x 1</span>
+                                                        <div class="col">
+                                                            <div class="row justify-content-between">
+                                                                <div class="col-4">
+                                                                    <span><?= $produk["varian"]; ?></span>
+                                                                </div>
+                                                                <div class="col-3 text-end">
+                                                                    <span>x <?= $produk["jumlah"]; ?></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col mt-3 pt-1 text-end">
+                                                            <span>Rp<?= $produk["total"]; ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col border-top mt-3 pt-1 text-end">
-                                                    <span>Rp2.429.400,00</span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <div class="">
+                                            <div class="row row-cols-2">
+                                                <div class="col d-flex justify-content-between">
+                                                    <span>Status</span>
+                                                    <span> :</span>
+                                                </div>
+                                                <div class="col text-end text-danger">
+                                                    <?= $data["status"]; ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="row row-cols-2">
+                                        <div class="row bg-light pt-3 pb-3 rounded mt-2">
                                             <div class="col d-flex justify-content-between">
-                                                <span>Status</span>
+                                                <span>Total pesanan</span>
                                                 <span> :</span>
                                             </div>
-                                            <div class="col text-end text-danger">
-                                                Belum dibayar
+                                            <div class="col text-end">
+                                                <strong>Rp<?= $data["FORMAT(total_pesanan, 2)"]; ?></strong>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row bg-light pt-3 pb-3 rounded mt-2">
-                                        <div class="col-5">
-                                            Total pesanan:
-                                        </div>
-                                        <div class="col text-end">
-                                            <strong>Rp2.429.400,00</strong>
-                                        </div>
-                                    </div>
 
-                                    <!-- UNGGAH BNUKTI PEMBAYARAN -->
-                                    <form action="" method="POST">
-                                        <div class="mb-3" id="input-bukti">
-                                            <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                        <!-- UNGGAH BNUKTI PEMBAYARAN -->
+                                        <form action="unggah-bukti.php?id_pesanan=<?= $data["id_pesanan"]; ?>" method="POST" enctype="multipart/form-data">
+                                            <div class="mb-3" id="input-bukti">
+                                                <input class="form-control form-control-sm" id="formFileSm" name="bukti" type="file">
+                                            </div>
+                                            <div class="unggah float-end mb-2">
+                                                <button name="unggahbukti" class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
+                                            </div>
+                                        </form>
+                                        <div class="cara-bayar pt-2">
+                                            <a style="font-size: small;" class="text-decoration-none" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
                                         </div>
-                                        <div class="unggah float-end mb-2">
-                                            <button class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
-                                        </div>
-                                        <!-- <div class="btn-bayar d-flex justify-content-end align-items-center mt-2 mb-2">
-
-                                        </div> -->
-                                    </form>
-                                    <div class="cara-bayar pt-2">
-                                        <a class="" href="">Lihat cara pembayaran</a>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -568,13 +618,15 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                     <div class="col">
                         <h6 class="price">Rp<?= $hargaFormat["FORMAT(harga, 2)"]; ?></h6>
                     </div>
-                    <form action="" method="POST">
-                        <input type="hidden" name="idAkun" value="<?= $id_akun; ?>">
-                        <input type="hidden" name="idProduk" value="<?= $produkData["id_produk"]; ?>">
-                        <input type="hidden" name="heroImg" value="<?= $produkImage["hero_img"]; ?>">
-                        <input type="hidden" name="namaProduk" value="<?= $produkData["nama"]; ?>">
-                        <input type="hidden" name="hargaProduk" value="<?= $produkData["harga"]; ?>">
+
+                    <!-- FORM DETAIL PRODUK -->
+                    <form action="order-form2.php" method="POST">
                         <div class="col mt-5">
+                            <input type="hidden" name="idAkun" value="<?= $id_akun; ?>">
+                            <input type="hidden" name="idProduk" value="<?= $produkData["id_produk"]; ?>">
+                            <input type="hidden" name="heroImg" value="<?= $produkImage["hero_img"]; ?>">
+                            <input type="hidden" name="namaProduk" value="<?= $produkData["nama"]; ?>">
+                            <input type="hidden" name="hargaProduk" value="<?= $produkData["harga"]; ?>">
                             <div class="row">
                                 <div class="col">
                                     <div class="input-group input-group-sm">
@@ -591,7 +643,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                             Jumlah
                                         </div>
                                         <div class="col">
-                                            <input required type="text" autocomplete="off" name="jumlahBarang" placeholder="0" class="form-control border form-control-sm border-0 text-center" min="1" max="20">
+                                            <input required type="number" autocomplete="off" name="jumlahBarang" placeholder="0" value="1" class="form-control border form-control-sm border-0 text-center" min="1" max="20">
                                         </div>
                                     </div>
                                 </div>
@@ -602,25 +654,25 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                                 <div class="col col-8">
                                     <div class="bg-white">
                                         <a href="">
-                                            <button type="submit" name="masukKeranjang" class="btn text-dark masukkan border rounded-0 container"><span style="font-size: larger;">Masukkan Keranjang</span></button>
+                                            <button type="submit" formaction="" name="masukKeranjang" class="btn text-dark masukkan border rounded-0 container"><span style="font-size: larger;">Masukkan Keranjang</span></button>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="bg-bg-white">
-                                        <a href="">
-                                            <button class="btn rounded-0 border button-chat container">
-                                                <svg width="29" height="29" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16.1875 12.7872C15.9075 13.1092 15.75 13.5537 15.75 13.9999C15.75 14.232 15.6578 14.4545 15.4937 14.6186C15.3296 14.7827 15.1071 14.8749 14.875 14.8749C14.643 14.8749 14.4204 14.7827 14.2563 14.6186C14.0922 14.4545 14 14.232 14 13.9999C14 13.1722 14.2818 12.3024 14.875 11.6304C15.4823 10.9409 16.38 10.4999 17.5 10.4999C18.62 10.4999 19.5178 10.9409 20.125 11.6304C20.7183 12.3042 21 13.1704 21 13.9999C21 14.8574 20.797 15.5224 20.4715 16.0824C20.1863 16.5707 19.8135 16.9574 19.5178 17.2672L19.4443 17.3424C19.1188 17.6837 18.8685 17.9619 18.6848 18.3119C18.5098 18.6462 18.375 19.0889 18.375 19.7627C18.375 19.9947 18.2828 20.2173 18.1187 20.3814C17.9546 20.5455 17.7321 20.6377 17.5 20.6377C17.268 20.6377 17.0454 20.5455 16.8813 20.3814C16.7172 20.2173 16.625 19.9947 16.625 19.7627C16.625 18.8317 16.8175 18.1054 17.1343 17.4999C17.444 16.9102 17.8518 16.4779 18.1808 16.1332L18.2193 16.0929C18.5483 15.7482 18.7828 15.5032 18.9595 15.2004C19.1258 14.9152 19.25 14.5547 19.25 13.9999C19.25 13.5537 19.0943 13.1074 18.8125 12.7872C18.5448 12.4844 18.13 12.2499 17.5 12.2499C16.87 12.2499 16.4553 12.4844 16.1875 12.7872ZM17.5 24.8709C17.6647 24.8772 17.8289 24.8501 17.9828 24.7914C18.1368 24.7327 18.2773 24.6435 18.396 24.5292C18.5147 24.4149 18.6091 24.2779 18.6736 24.1263C18.7381 23.9746 18.7713 23.8116 18.7713 23.6468C18.7713 23.482 18.7381 23.319 18.6736 23.1673C18.6091 23.0157 18.5147 22.8787 18.396 22.7644C18.2773 22.6501 18.1368 22.5609 17.9828 22.5022C17.8289 22.4435 17.6647 22.4164 17.5 22.4227C17.1751 22.4227 16.8635 22.5517 16.6338 22.7815C16.4041 23.0112 16.275 23.3228 16.275 23.6477C16.275 23.9726 16.4041 24.2841 16.6338 24.5139C16.8635 24.7436 17.1751 24.8727 17.5 24.8727V24.8709ZM3.50002 17.4999C3.50078 14.4406 4.50363 11.4658 6.35518 9.03037C8.20672 6.59498 10.805 4.83311 13.7527 4.01425C16.7004 3.19538 19.8352 3.3646 22.6776 4.49601C25.52 5.62742 27.9136 7.65875 29.4922 10.2793C31.0708 12.8999 31.7476 15.9654 31.419 19.007C31.0905 22.0486 29.7747 24.8989 27.6728 27.1219C25.571 29.3448 22.7988 30.8181 19.7804 31.3165C16.7619 31.8148 13.6633 31.3106 10.9585 29.8812L4.58852 31.4737C4.44191 31.5105 4.28826 31.5088 4.14254 31.4686C3.99681 31.4284 3.86399 31.3511 3.75701 31.2443C3.65003 31.1375 3.57255 31.0048 3.53211 30.8591C3.49167 30.7135 3.48966 30.5598 3.52627 30.4132L5.11876 24.0414C4.05248 22.0261 3.49667 19.78 3.50002 17.4999ZM17.5 5.24992C15.3622 5.24927 13.2614 5.80811 11.4064 6.87089C9.55148 7.93368 8.00696 9.4634 6.92637 11.308C5.84577 13.1527 5.26674 15.248 5.24681 17.3857C5.22688 19.5235 5.76675 21.6292 6.81276 23.4937C6.92262 23.6882 6.95393 23.9173 6.90027 24.1342L5.57727 29.4227L10.8658 28.0997C11.0826 28.046 11.3118 28.0773 11.5063 28.1872C13.1395 29.1021 14.9606 29.6306 16.8299 29.7319C18.6992 29.8333 20.5668 29.505 22.2894 28.772C24.012 28.0391 25.5437 26.9211 26.7668 25.504C27.99 24.0868 28.8721 22.4082 29.3454 20.597C29.8187 18.7858 29.8706 16.8902 29.497 15.0558C29.1235 13.2214 28.3346 11.4971 27.1908 10.0151C26.047 8.53318 24.5787 7.3331 22.8988 6.50705C21.2189 5.68099 19.372 5.25094 17.5 5.24992Z" fill="#7895B2" />
-                                                </svg>
-                                            </button>
+                                        <a href="https://api.whatsapp.com/send?phone=6285604276781&text=Apa%20barang%20ini%20tersedia?%20Nama%20Barang->%20<?= $produkData["nama"]; ?>" class="btn rounded-0 border button-chat container">
+                                            <svg width="29" height="29" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M16.1875 12.7872C15.9075 13.1092 15.75 13.5537 15.75 13.9999C15.75 14.232 15.6578 14.4545 15.4937 14.6186C15.3296 14.7827 15.1071 14.8749 14.875 14.8749C14.643 14.8749 14.4204 14.7827 14.2563 14.6186C14.0922 14.4545 14 14.232 14 13.9999C14 13.1722 14.2818 12.3024 14.875 11.6304C15.4823 10.9409 16.38 10.4999 17.5 10.4999C18.62 10.4999 19.5178 10.9409 20.125 11.6304C20.7183 12.3042 21 13.1704 21 13.9999C21 14.8574 20.797 15.5224 20.4715 16.0824C20.1863 16.5707 19.8135 16.9574 19.5178 17.2672L19.4443 17.3424C19.1188 17.6837 18.8685 17.9619 18.6848 18.3119C18.5098 18.6462 18.375 19.0889 18.375 19.7627C18.375 19.9947 18.2828 20.2173 18.1187 20.3814C17.9546 20.5455 17.7321 20.6377 17.5 20.6377C17.268 20.6377 17.0454 20.5455 16.8813 20.3814C16.7172 20.2173 16.625 19.9947 16.625 19.7627C16.625 18.8317 16.8175 18.1054 17.1343 17.4999C17.444 16.9102 17.8518 16.4779 18.1808 16.1332L18.2193 16.0929C18.5483 15.7482 18.7828 15.5032 18.9595 15.2004C19.1258 14.9152 19.25 14.5547 19.25 13.9999C19.25 13.5537 19.0943 13.1074 18.8125 12.7872C18.5448 12.4844 18.13 12.2499 17.5 12.2499C16.87 12.2499 16.4553 12.4844 16.1875 12.7872ZM17.5 24.8709C17.6647 24.8772 17.8289 24.8501 17.9828 24.7914C18.1368 24.7327 18.2773 24.6435 18.396 24.5292C18.5147 24.4149 18.6091 24.2779 18.6736 24.1263C18.7381 23.9746 18.7713 23.8116 18.7713 23.6468C18.7713 23.482 18.7381 23.319 18.6736 23.1673C18.6091 23.0157 18.5147 22.8787 18.396 22.7644C18.2773 22.6501 18.1368 22.5609 17.9828 22.5022C17.8289 22.4435 17.6647 22.4164 17.5 22.4227C17.1751 22.4227 16.8635 22.5517 16.6338 22.7815C16.4041 23.0112 16.275 23.3228 16.275 23.6477C16.275 23.9726 16.4041 24.2841 16.6338 24.5139C16.8635 24.7436 17.1751 24.8727 17.5 24.8727V24.8709ZM3.50002 17.4999C3.50078 14.4406 4.50363 11.4658 6.35518 9.03037C8.20672 6.59498 10.805 4.83311 13.7527 4.01425C16.7004 3.19538 19.8352 3.3646 22.6776 4.49601C25.52 5.62742 27.9136 7.65875 29.4922 10.2793C31.0708 12.8999 31.7476 15.9654 31.419 19.007C31.0905 22.0486 29.7747 24.8989 27.6728 27.1219C25.571 29.3448 22.7988 30.8181 19.7804 31.3165C16.7619 31.8148 13.6633 31.3106 10.9585 29.8812L4.58852 31.4737C4.44191 31.5105 4.28826 31.5088 4.14254 31.4686C3.99681 31.4284 3.86399 31.3511 3.75701 31.2443C3.65003 31.1375 3.57255 31.0048 3.53211 30.8591C3.49167 30.7135 3.48966 30.5598 3.52627 30.4132L5.11876 24.0414C4.05248 22.0261 3.49667 19.78 3.50002 17.4999ZM17.5 5.24992C15.3622 5.24927 13.2614 5.80811 11.4064 6.87089C9.55148 7.93368 8.00696 9.4634 6.92637 11.308C5.84577 13.1527 5.26674 15.248 5.24681 17.3857C5.22688 19.5235 5.76675 21.6292 6.81276 23.4937C6.92262 23.6882 6.95393 23.9173 6.90027 24.1342L5.57727 29.4227L10.8658 28.0997C11.0826 28.046 11.3118 28.0773 11.5063 28.1872C13.1395 29.1021 14.9606 29.6306 16.8299 29.7319C18.6992 29.8333 20.5668 29.505 22.2894 28.772C24.012 28.0391 25.5437 26.9211 26.7668 25.504C27.99 24.0868 28.8721 22.4082 29.3454 20.597C29.8187 18.7858 29.8706 16.8902 29.497 15.0558C29.1235 13.2214 28.3346 11.4971 27.1908 10.0151C26.047 8.53318 24.5787 7.3331 22.8988 6.50705C21.2189 5.68099 19.372 5.25094 17.5 5.24992Z" fill="#7895B2" />
+                                            </svg>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col mt-2">
-                            <button class="btn rounded-0 border btn-checkout container p-2" style="font-size: x-large;">Beli Sekarang</button>
+                            <!-- TOTAL BELANJAAA -->
+                            <input type="hidden" name="totalBelanja" value="<?= $SubtotalKeranjang["Subtotal"]; ?>">
+                            <button type="submit" name="btn-beliSekarang" class="btn rounded-0 border btn-checkout container p-2" style="font-size: x-large;">Beli Sekarang</button>
                         </div>
                     </form>
                     <div class="col mt-2">

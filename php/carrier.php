@@ -40,8 +40,10 @@ if (isset($_POST["ubahDataCustomer"])) {
     }
 }
 
+$id_akun = $_SESSION["id_akun"];
+
 // UNTUK SHOW DATA KESELURUHAN MENGGUNAKAN LOOP
-$produk = showData("SELECT produk.id_produk, produk.nama, FORMAT(produk.harga, 2), produk_image.hero_img, produk_image.id_produk_image  
+$dataproduk = showData("SELECT produk.id_produk, produk.nama, FORMAT(produk.harga, 2), produk_image.hero_img, produk_image.id_produk_image  
                         FROM produk_image CROSS JOIN produk ON produk_image.id_produk=produk.id_produk");
 
 // SHOW DATA KERANJANG BELANJA
@@ -54,8 +56,11 @@ $subTotal = showData("SELECT harga FROM keranjang_belanja WHERE id_akun='$_SESSI
 $totalKeranjang = showDataTable("SELECT FORMAT(SUM(total), 2) Subtotal
                                     FROM keranjang_belanja
                                         WHERE id_akun='$_SESSION[id_akun]'");
-// var_dump($totalKeranjang);
-// die;
+
+
+$SubtotalKeranjang = showDataTable("SELECT SUM(total) Subtotal
+                                        FROM keranjang_belanja
+                                            WHERE id_akun=$id_akun");
 
 // echo $ruangSubtotal;
 
@@ -68,7 +73,13 @@ $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_aku
 
 
 // SHOW DATA UNTUK INFORMASI CUSTOMER
-$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'")
+$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
+
+// TABEL PESANAN
+$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2) FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
+
+// TABLE PESANAN LOOPING
+$idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
 
 ?>
 <!DOCTYPE html>
@@ -304,9 +315,12 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                             </div>
                         </div>
                         <div class="col mt-3 mb-3">
-                            <button class="btn container checkout-btn p-2" id="Checkout">
-                                Checkout
-                            </button>
+                            <form action="order-form.php" method="POST">
+                                <input type="hidden" name="totalBelanja" value="<?= $SubtotalKeranjang["Subtotal"]; ?>">
+                                <button type="submit" name="btn-checkout" class="btn container checkout-btn p-2" id="Checkout">
+                                    Checkout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -434,73 +448,78 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#daftarPesanan">
                         <div class="accordion-body">
-                            <div class="row border pt-2 row-cols-1">
-                                <div class="col border-bottom">
-                                    <h6>No. Pesanan</h6>
-                                </div>
-                                <div class="col">
-                                    <div class="row pt-3 pb-3">
-                                        <div class="col-4 d-flex justify-content-center align-items-center">
-                                            <img class="img-fluid" src="../img-assets/section-2/produk-1.png" alt="">
-                                        </div>
-                                        <div class="col">
-                                            <div class="row row-cols-1">
-                                                <div class="col">
-                                                    <h6>Eiger Equator Trek 65L</h6>
+                            <?php foreach ($pesanan as $data) : ?>
+                                <div class="row mt-2 pt-2 row-cols-1" style="border: 1px solid #7895B2;">
+                                    <div class="col border-bottom">
+                                        <h6>Kode Pesanan : <?= $data["no_pesanan"]; ?></h6>
+                                    </div>
+                                    <div class="col">
+                                        <?php
+                                        $ordered = showData("SELECT * FROM ordered WHERE id_pesanan=$data[id_pesanan]");
+                                        ?>
+                                        <?php foreach ($ordered as $produk) : ?>
+                                            <div class="row pt-3 pb-3">
+                                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                                    <img class="img-fluid" src="../img-assets/product/<?= $produk["hero_img"]; ?>" alt="">
                                                 </div>
                                                 <div class="col">
-                                                    <div class="row justify-content-between">
-                                                        <div class="col-4">
-                                                            <span>White</span>
+                                                    <div class="row row-cols-1">
+                                                        <div class="col">
+                                                            <h6><?= $produk["nama_produk"]; ?></h6>
                                                         </div>
-                                                        <div class="col-3 text-end">
-                                                            <span>x 1</span>
+                                                        <div class="col">
+                                                            <div class="row justify-content-between">
+                                                                <div class="col-4">
+                                                                    <span><?= $produk["varian"]; ?></span>
+                                                                </div>
+                                                                <div class="col-3 text-end">
+                                                                    <span>x <?= $produk["jumlah"]; ?></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col border-top mt-3 pt-1 text-end">
+                                                            <span>Rp<?= $produk["total"]; ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col border-top mt-3 pt-1 text-end">
-                                                    <span>Rp2.429.400,00</span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <div class="">
+                                            <div class="row row-cols-2">
+                                                <div class="col d-flex justify-content-between">
+                                                    <span>Status</span>
+                                                    <span> :</span>
+                                                </div>
+                                                <div class="col text-end text-danger">
+                                                    <?= $data["status"]; ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="row row-cols-2">
+                                        <div class="row bg-light pt-3 pb-3 rounded mt-2">
                                             <div class="col d-flex justify-content-between">
                                                 <span>Status</span>
                                                 <span> :</span>
                                             </div>
-                                            <div class="col text-end text-danger">
-                                                Belum dibayar
+                                            <div class="col text-end">
+                                                <strong>Rp<?= $data["FORMAT(total_pesanan, 2)"]; ?></strong>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row bg-light pt-3 pb-3 rounded mt-2">
-                                        <div class="col-5">
-                                            Total pesanan:
-                                        </div>
-                                        <div class="col text-end">
-                                            <strong>Rp2.429.400,00</strong>
-                                        </div>
-                                    </div>
 
-                                    <!-- UNGGAH BNUKTI PEMBAYARAN -->
-                                    <form action="" method="POST">
-                                        <div class="mb-3" id="input-bukti">
-                                            <input class="form-control form-control-sm" id="formFileSm" type="file">
+                                        <!-- UNGGAH BNUKTI PEMBAYARAN -->
+                                        <form action="unggah-bukti.php?id_pesanan=<?= $data["id_pesanan"]; ?>" method="POST" enctype="multipart/form-data">
+                                            <div class="mb-3" id="input-bukti">
+                                                <input class="form-control form-control-sm" id="formFileSm" name="bukti" type="file">
+                                            </div>
+                                            <div class="unggah float-end mb-2">
+                                                <button name="unggahbukti" class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
+                                            </div>
+                                        </form>
+                                        <div class="cara-bayar pt-2">
+                                            <a style="font-size: small;" class="text-decoration-none" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
                                         </div>
-                                        <div class="unggah float-end mb-2">
-                                            <button class="btn btn-outline-success rounded-0" type="submit">Unggah bukti</button>
-                                        </div>
-                                        <!-- <div class="btn-bayar d-flex justify-content-end align-items-center mt-2 mb-2">
-
-                                        </div> -->
-                                    </form>
-                                    <div class="cara-bayar pt-2">
-                                        <a class="" href="">Lihat cara pembayaran</a>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -514,7 +533,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
     <section class="section-1">
         <div class="container">
             <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-1">
-                <?php foreach ($produk as $row) : ?>
+                <?php foreach ($dataproduk as $row) : ?>
                     <div class="col mt-3 mt-sm-0">
                         <div class="container-product">
                             <div class="row row-cols-1 pt-4 pb-4">
@@ -557,7 +576,7 @@ $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSIO
     </div>
 
     <!-- FOOTER -->
-    <footer class="ini-footer bg-white border-bottom border-top">
+    <footer class="ini-fo  border-top">
         <div class="container-fluid contain-footer">
             <div class="row logo-raget">
 

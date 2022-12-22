@@ -99,6 +99,7 @@ function logoutRaget()
     session_destroy();
     echo "<script> alert('Anda keluar!');
                     document.location.href = 'user-login.php';
+                        window.history.replaceState( null, null, window.location.href );
             </script>";
     exit();
 }
@@ -108,7 +109,7 @@ function addAvatar($image)
 {
     global $dconn;
 
-    $avatar = uploadAvatar();
+    $avatar = uploadImage();
 
     if (!$avatar) {
         # code...
@@ -124,7 +125,7 @@ function addAvatar($image)
 }
 
 // FUNCTION UPLOAD ( FILE HANDLING)
-function uploadAvatar()
+function uploadImage()
 {
     $fileName = $_FILES['user-profile']['name'];
     $fileSize = $_FILES['user-profile']['size'];
@@ -226,7 +227,7 @@ function tambahBarang($dataBarang)
     }
 
     $query = "INSERT INTO keranjang_belanja
-                VALUES ('', '$heroImg', '$namaProduk', $hargaProduk, '$varianProduk', $jumlahBarang, $total, $idPoduk, $idAkun )";
+                VALUES ('', '$namaProduk', '$heroImg', $hargaProduk, $jumlahBarang, '$varianProduk', $total, $idAkun, $idPoduk )";
 
     mysqli_query($dconn, $query);
 
@@ -281,7 +282,165 @@ function deleteKeranjang($idKeranjang)
 
     mysqli_query($dconn, $query);
 
-    $script = "<script> window.history.back(); </script>";
+    $script = "<script> window.history.back();
+                            window.history.replaceState( null, null, window.location.href );
+                                window.location.reload();
+                </script>";
 
     echo $script;
+}
+
+function buatPesananFIX($dataCheckout)
+{
+    global $dconn;
+
+    $id_akun = $dataCheckout["idAkun"];
+    $karakter = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $kode_pesanan = substr(str_shuffle($karakter), 0, 11);
+    $namaPenerima = $dataCheckout["namaPenerima"];
+    $nomorHP =  $dataCheckout["nomorHP"];
+    $catatan = $dataCheckout["catatanPesanan"];
+    $alamat = $dataCheckout["alamatPenerima"];
+    $pilihanPengiriman = $dataCheckout["pilihanPengiriman"];
+    // status pesanan -> Belum dibayar
+    // bukti -> NULL
+    $totalPembayaran = $dataCheckout["totalPembayaran"];
+
+    $query = "INSERT INTO pesanan (id_pesanan, no_pesanan, nama_penerima, nomor_hp, catatan, alamat, jasa_pengiriman, status, bukti, total_pesanan, id_akun)
+                VALUES ('', '$kode_pesanan', '$namaPenerima', '$nomorHP', '$catatan', '$alamat', '$pilihanPengiriman', 'Belum dibayar', '', '$totalPembayaran', '$id_akun')";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+function orderedProduk($id_akun)
+{
+
+    global $dconn;
+    $getIdPesanan = mysqli_insert_id($dconn);
+    $query = "INSERT INTO ordered (id_pesanan, nama_produk, hero_img, harga, jumlah, varian, total, id_akun, id_produk)
+                SELECT '$getIdPesanan', nama_produk, hero_img, harga, jumlah, varian, total, id_akun, id_produk
+                    FROM keranjang_belanja
+                        WHERE id_akun='$id_akun'";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+function delete($id_akun)
+{
+    global $dconn;
+
+    $query = "DELETE FROM keranjang_belanja WHERE id_akun='$id_akun'";
+    mysqli_query($dconn, $query);
+    return mysqli_affected_rows($dconn);
+}
+
+function unggahbBukti($id_pesanan)
+{
+    global $dconn;
+
+    $bukti = uploadBukti();
+
+    if (!$bukti) {
+        # code...
+        return false;
+    }
+
+    // $id_logged = $_SESSION["id_akun"];
+    $query = "UPDATE pesanan SET bukti = '$bukti' WHERE pesanan.id_pesanan = $id_pesanan";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+// FUNCTION UPLOAD ( FILE HANDLING)
+function uploadBukti()
+{
+    $fileName = $_FILES['bukti']['name'];
+    $fileSize = $_FILES['bukti']['size'];
+    $error = $_FILES['bukti']['error'];
+    $tmpName = $_FILES['bukti']['tmp_name'];
+
+    if ($error === 4) {
+        # code...
+        echo "<script> alert('Pilih gambar terlebih dahulu!'); </script>";
+        return false;
+    }
+
+    $validExtension = ['jpg', 'jpeg', 'png'];
+    $exImage = explode('.', $fileName);
+    $exImage = strtolower(end($exImage));
+
+    if (!in_array($exImage, $validExtension)) {
+        # code...
+        echo "<script> alert('Format file anda tidak sesuai!'); </script>";
+        return false;
+    }
+
+    if ($fileSize > 10000000) {
+        # code...
+        echo "<script> alert('Ukuran file terlalu besar!'); </script>";
+        return false;
+    }
+
+    $imageUploadName = uniqid();
+    $imageUploadName .= '.';
+    $imageUploadName .= $exImage;
+    move_uploaded_file($tmpName, '../img-assets/buktiPembayaran/' . $imageUploadName);
+
+    return $imageUploadName;
+}
+
+function orderedbeliSekarng($dataOrdered)
+{
+    global $dconn;
+    $namaProduk = $dataOrdered["namaProduk"];
+    $heroImg = $dataOrdered["heroImg"];
+    $harga = $dataOrdered["hargaProduk"];
+    $jumlah = $dataOrdered["jumlahBarang"];
+    $varian = $dataOrdered["selected-varian"];
+
+    $total = $harga * $jumlah;
+    $id_akun = $dataOrdered["idAkun"];
+    $id_produk = $dataOrdered["idProduk"];
+
+    $getIdPesanan = mysqli_insert_id($dconn);
+    $query = "INSERT INTO ordered (nama_produk, hero_img, harga, jumlah, varian, total, id_akun, id_produk)
+                    VALUES ('$namaProduk', '$heroImg', '$harga', '$jumlah', '$varian', '$total', '$id_akun', '$id_produk')";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+function deletebeliSekarang($id_keranjangBelanja)
+{
+    global $dconn;
+
+    $query = "DELETE FROM keranjang_belanja WHERE id_keranjangBelanja='$id_keranjangBelanja'";
+    mysqli_query($dconn, $query);
+    return mysqli_affected_rows($dconn);
+}
+
+function updateOrderedBeliSekarang($id_pesanan)
+{
+    global $dconn;
+    $query = "UPDATE ordered SET id_pesanan='$id_pesanan' WHERE id_ordered=(SELECT MAX(id_ordered) FROM ordered)";
+
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
+}
+
+function deleteOrdered()
+{
+    global $dconn;
+    $query = "DELETE FROM ordered WHERE id_ordered=(SELECT MAX(id_ordered) FROM ordered )";
+    mysqli_query($dconn, $query);
+
+    return mysqli_affected_rows($dconn);
 }
