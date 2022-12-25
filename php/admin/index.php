@@ -1,6 +1,16 @@
 <?php
-
+session_start();
 require '../function-final.php';
+
+if (isset($_POST["logoutAdmin"])) {
+    # code...   
+    session_destroy();
+    echo "<script> alert('Anda keluar!');
+                    document.location.href = '../user-login.php';
+                        window.history.replaceState( null, null, window.location.href );
+            </script>";
+    exit();
+}
 
 // MENGAMBIL SELURUH JUMLAH PESANAN
 $jumlahPesanan = getAllTabelData("SELECT * FROM pesanan");
@@ -193,7 +203,9 @@ if (isset($_GET["delete"])) {
                         </button>
                         <ul class="dropdown-menu rounded-0">
                             <li><button class="dropdown-item" type="button">Profile</button></li>
-                            <li><button class="dropdown-item text-danger" type="button">Log Out</button></li>
+                            <form action="" method="POST">
+                                <li><button class="dropdown-item text-danger" type="submit" name="logoutAdmin">Log Out</button></li>
+                            </form>
                         </ul>
                     </div>
                 </div>
