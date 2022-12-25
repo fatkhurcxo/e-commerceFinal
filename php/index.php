@@ -79,7 +79,11 @@ if (isset($_POST["unggahbukti"])) {
 $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_akun]'");
 
 // TABEL CUSTOMER
-$tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
+$tableCustomer = showData("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
+
+$nama = $tableCustomer[0]["nama_customer"];
+
+
 
 // TABEL KERANJANG TOTAL
 $totalKeranjang = showDataTable("SELECT FORMAT(SUM(total), 2) Subtotal
@@ -93,7 +97,7 @@ $cart = showData("SELECT * FROM keranjang_belanja WHERE id_akun='$_SESSION[id_ak
 $idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
 
 // TABEL PESANAN
-$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2) FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
+$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2), tgl_pemesanan FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
 
 
 
@@ -424,7 +428,7 @@ $pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_
                         <div class="accordion-body">
                             <div class="row row-cols-1">
                                 <div class="col">
-                                    <div class="row row-cols-2 justify-content-between">
+                                    <div class="row row-cols-2 border-bottom justify-content-between">
                                         <div class="col-6 d-flex align-items-center">
                                             <strong>Informasi Kontak</strong>
                                         </div>
@@ -433,27 +437,31 @@ $pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col mt-3 border rounded pt-3">
-                                    <p>
-                                        <?= $tableCustomer['nama_customer']; ?>
-                                        <br>
-                                        <span><?= $tableCustomer['email']; ?></span>
-                                        <br>
-                                        <span><?= $tableCustomer['nomor_hp']; ?></span>
-                                    </p>
-                                </div>
+                                <?php foreach ($tableCustomer as $customer) : ?>
+                                    <div class="col mt-3 border rounded pt-3">
+                                        <p>
+                                            <?= $customer['nama_customer']; ?>
+                                            <br>
+                                            <span><?= $customer['email']; ?></span>
+                                            <br>
+                                            <span><?= $customer['nomor_hp']; ?></span>
+                                        </p>
+                                    </div>
+                                <?php endforeach; ?>
                                 <div class="col mt-3">
-                                    <div class="row row-cols-2 justify-content-between">
+                                    <div class="row row-cols-2 justify-content-between border-bottom pb-1">
                                         <div class="col-6 d-flex align-items-center">
                                             <strong>Alamat</strong>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col mt-3 border rounded pt-3">
-                                    <p>
-                                        <?= $tableCustomer['alamat']; ?>
-                                    </p>
-                                </div>
+                                <?php foreach ($tableCustomer as $alamat) : ?>
+                                    <div class="col mt-3 border rounded pt-3">
+                                        <p>
+                                            <?= $alamat['alamat']; ?>
+                                        </p>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -472,6 +480,9 @@ $pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_
                                         <h6>Kode Pesanan : <?= $data["no_pesanan"]; ?></h6>
                                     </div>
                                     <div class="col">
+                                        <div class="col p-1 text-end">
+                                            <span><?= $data["tgl_pemesanan"]; ?></span>
+                                        </div>
                                         <?php
 
                                         $ordered = showData("SELECT * FROM ordered WHERE id_pesanan=$data[id_pesanan]");
@@ -534,7 +545,7 @@ $pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_
                                             </div>
                                         </form>
                                         <div class="cara-bayar pt-2">
-                                            <a style="font-size: small;" class="text-decoration-none" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
+                                            <a style="font-size: small;" class="text-decoration-none" target="_blank" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,7 +1068,18 @@ $pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 
 
-    <script src="../javascript/index.js">
+    <!-- <script src="../javascript/index.js">
+    </script> -->
+
+    <script>
+        // HIDE AND SHOW MODAL WELCOME
+        var dataCus = <?= json_encode($nama) ?>;
+        const myModal = new bootstrap.Modal(document.getElementById('mymodal'), Option);
+        if (dataCus !== null) {
+            myModal.hide()
+        } else {
+            myModal.show();
+        };
     </script>
 </body>
 

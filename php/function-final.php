@@ -444,3 +444,11 @@ function deleteOrdered()
 
     return mysqli_affected_rows($dconn);
 }
+
+function getAllTabelData($query)
+{
+    global $dconn;
+
+    $dataPesanan = mysqli_num_rows(mysqli_query($dconn, $query));
+    return $dataPesanan;
+}

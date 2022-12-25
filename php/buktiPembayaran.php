@@ -30,7 +30,7 @@ $dataBukti = showDataTable("SELECT * FROM pesanan WHERE bukti='$bukti'");
                     <div class="container">
                         <div class="d-flex justify-content-between">
                             <div class="">
-                                <h5>LIHATTTTTTTTTTT</h5>
+                                <h5>L I H A T T T T T T ! ! ! ! !</h5>
                             </div>
                             <div class="">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -56,7 +56,7 @@ $dataBukti = showDataTable("SELECT * FROM pesanan WHERE bukti='$bukti'");
                         <a class="text-decoration-none" data-bs-toggle="modal" href="#staticBackdrop">Lihat senyumku</a>
                     </div>
                     <div class="col">
-                        <button onclick="history.go(-1);" class="btn btn-outline-danger btn-sm ps-3 pe-3">Kembali</button>
+                        <!-- <button onclick="history.go(-1);" class="btn btn-outline-danger btn-sm ps-3 pe-3">Kembali</button> -->
                     </div>
                 </div>
             </div>

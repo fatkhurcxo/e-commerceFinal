@@ -18,7 +18,9 @@ if (isset($_POST["register"])) {
 
     if (registerRaget($_POST) > 0) {
         # code...
-        echo "<script> alert('Akun anda berhasil dibuat'); </script>";
+        echo "<script> alert('Akun anda berhasil dibuat');
+                            window.history.replaceState( null, null, window.location.href );
+                </script>";
     } else {
         # code...
         echo mysqli_error($dconn);

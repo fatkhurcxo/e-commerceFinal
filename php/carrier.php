@@ -76,7 +76,7 @@ $tableAkun = showDataTable("SELECT * FROM akun WHERE id_akun = '$_SESSION[id_aku
 $tableCustomer = showDataTable("SELECT * FROM customer WHERE id_akun = '$_SESSION[id_akun]'");
 
 // TABEL PESANAN
-$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2) FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
+$pesanan = showData("SELECT id_pesanan, no_pesanan, status, bukti, FORMAT(total_pesanan, 2), tgl_pemesanan FROM pesanan WHERE id_akun='$_SESSION[id_akun]'");
 
 // TABLE PESANAN LOOPING
 $idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
@@ -454,6 +454,9 @@ $idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
                                         <h6>Kode Pesanan : <?= $data["no_pesanan"]; ?></h6>
                                     </div>
                                     <div class="col">
+                                        <div class="col p-1 text-end">
+                                            <span><?= $data["tgl_pemesanan"]; ?></span>
+                                        </div>
                                         <?php
                                         $ordered = showData("SELECT * FROM ordered WHERE id_pesanan=$data[id_pesanan]");
                                         ?>
@@ -515,7 +518,7 @@ $idPesanan = showData("SELECT * FROM pesanan WHERE id_akun=$_SESSION[id_akun]");
                                             </div>
                                         </form>
                                         <div class="cara-bayar pt-2">
-                                            <a style="font-size: small;" class="text-decoration-none" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
+                                            <a style="font-size: small;" class="text-decoration-none" target="_blank" href="buktiPembayaran.php?bukti=<?= $data["bukti"]; ?>">Lihat bukti</a>
                                         </div>
                                     </div>
                                 </div>
